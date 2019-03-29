@@ -1,0 +1,11 @@
+@import 'styles/mixins';
+
+.login-wrapper {
+  width: 400px;
+  padding: 30px 40px;
+  @include absolute-center();
+  border: 1px solid #eee;
+  border-radius: 4px;
+  box-shadow: 0 0 1px #eee;
+  background-color: #fff;
+}

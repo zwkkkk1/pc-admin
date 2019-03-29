@@ -1,0 +1,17 @@
+@import '~normalize.css/normalize.css';
+
+.layout-wrapper {
+  min-height: 100vh;
+
+  .layout-header {
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .08);
+    display: flex;
+    align-items: center;
+    padding-left: 16px;
+  }
+
+  .layout-content {
+    margin: 16px;
+  }
+}
