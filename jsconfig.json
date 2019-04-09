@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "experimentalDecorators": true,
     "target": "ES6",
     "baseUrl": "./", //表示根路径
     "paths": {
@@ -8,6 +9,7 @@
       "utils/*": ["./app/utils/*"],
       "models/*": ["./app/models/*"],
       "images/*": ["./app/assets/images/*"],
+      "services/*": ["./app/services/*"],
     },
   },
   "exclude": [

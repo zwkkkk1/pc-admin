@@ -44,6 +44,7 @@ module.exports = {
       models: path.resolve(__dirname, 'app/models/'),
       images: path.resolve(__dirname, 'app/assets/images/'),
       styles: path.resolve(__dirname, 'app/styles/'),
+      services: path.resolve(__dirname, 'app/services/'),
     },
     extensions: ['.js', '.scss', '.css'],
   },

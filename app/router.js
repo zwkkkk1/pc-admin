@@ -3,15 +3,16 @@ import { Route, Router, Switch } from 'dva/router'
 import App from 'pages'
 import Login from 'pages/login'
 import NotFound from 'pages/NotFound'
+import AuthRouter from 'components/AuthRouter'
 
 export default function (props) {
   const { history } = props
   return (
     <Router history={history}>
       <Switch>
-        <Route exact path='/' component={App} />
         <Route path='/login' component={Login} />
-        <Route path='/404' component={NotFound} />
+        <AuthRouter path='/app' component={App} />
+        <Route component={NotFound} />
       </Switch>
     </Router>
   )

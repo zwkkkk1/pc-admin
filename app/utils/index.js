@@ -6,28 +6,30 @@ import FrontUser from 'pages/user/front'
 import BackUser from 'pages/user/back'
 import Category from 'pages/category'
 
+const prefix = '/app'
+
 export const menuMap = [
   { icon: 'pie-chart', name: '商品管理', children: [
-    { name: '商品管理', link: '/product/manage' },
-    { name: '商品审核', link: '/product/review' },
+    { name: '商品管理', link: `${prefix}/product/manage` },
+    { name: '商品审核', link: `${prefix}/product/review` },
   ]},
   { icon: 'user', name: '用户管理', children: [
-    { name: '前台用户管理', link:'/user/front' },
-    { name: '后台用户管理', link: '/user/back' },
+    { name: '前台用户管理', link: `${prefix}/user/front` },
+    { name: '后台用户管理', link: `${prefix}/user/back` },
   ]},
   { icon: 'team', name: '类目管理', children: [
-    { name: '类目管理', link: '/category' },
+    { name: '类目管理', link: `${prefix}/category` },
   ]},
 ]
 
 export const routeConfig = [
-  { path: 'pages/home', alias: '/', component: Home, exact: true },
   { path: 'pages/login', alias: '/login', component: Login },
-  { path: 'pages/product/manage', alias: '/product/manage', component: ProductManage },
-  { path: 'pages/product/review', alias: '/product/review', component: ProductReview },
-  { path: 'pages/user/front', alias: '/user/front', component: FrontUser },
-  { path: 'pages/user/back', alias: '/user/back', component: BackUser },
-  { path: 'pages/category', alias: '/category', component: Category },
+  { path: 'pages/home', alias: `${prefix}/`, component: Home, exact: true },
+  { path: 'pages/product/manage', alias: `${prefix}/product/manage`, component: ProductManage },
+  { path: 'pages/product/review', alias: `${prefix}/product/review`, component: ProductReview },
+  { path: 'pages/user/front', alias: `${prefix}/user/front`, component: FrontUser },
+  { path: 'pages/user/back', alias: `${prefix}/user/back`, component: BackUser },
+  { path: 'pages/category', alias: `${prefix}/category`, component: Category },
 ]
 
 export { default as request } from './request'

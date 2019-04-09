@@ -14,11 +14,12 @@ class myForm extends React.PureComponent {
 
   handleSubmit = (e) => {
     e.preventDefault()
+    const { handleSubmit } = this.props
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values)
       }
-      request.post('/user/register', values)
+      handleSubmit(values)
     })
   }
 

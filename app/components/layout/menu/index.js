@@ -5,11 +5,11 @@ import './style'
 const SubMenu = Menu.SubMenu;
 
 export default class myMenu extends React.Component {
-  renderItem(item, subMenuName = '') {
+  renderItem(item, subMenuName = '', index) {
     const { handleClickMenu } = this.props
-    const { icon, name, children } = item
+    const { icon, name, children, link } = item
     if (!children || !children.length) { return (
-      <Menu.Item onClick={handleClickMenu.bind(this, item, subMenuName)}>
+      <Menu.Item key={link} onClick={handleClickMenu.bind(this, item, subMenuName)}>
         {icon && <Icon type={icon} />}
         <span>{name}</span>
       </Menu.Item>
@@ -17,9 +17,10 @@ export default class myMenu extends React.Component {
     return (
       <SubMenu
         title={<span><Icon type={icon}/><span>{name}</span></span>}
+        key={`sub_${index}`}
       >
-        { children.map((child, index) => (
-          this.renderItem(child, name, index)
+        { children.map((child) => (
+          this.renderItem(child, name)
         ))}
       </SubMenu>
     )
@@ -29,7 +30,7 @@ export default class myMenu extends React.Component {
     const { map } = this.props
     return (
       <Menu theme="dark" mode="inline">
-        {map.map(item => this.renderItem(item))}
+        {map.map((item, index) => this.renderItem(item, '', index))}
       </Menu>
     )
   }

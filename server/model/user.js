@@ -13,27 +13,28 @@ userSchema.statics = {
   register: async (...args) => {
     const { username, password } = args[0]
     if (username === '' || password === '') {
-      return { status: 401, message: '用户名或密码不得为空' }
+      return { status: 401, data: '用户名或密码不得为空' }
     }
     const user = await UserModel.findOne({ username })
     if (user) {
-      return { status: 409, message: '用户名已存在' }
+      return { status: 409, data: '用户名已存在' }
     }
     await hashPassword(password).then(({ password, salt }) => {
       UserModel.create({ username, password, salt })
     })
-    return { status: 200, message: '注册成功' }
+    return { status: 200, data: '注册成功' }
   },
+  
   login: async (...args) => {
     const { username, password } = args[0]
     const user = await UserModel.findOne({ username })
     if (!user) {
-      return { status: 500, message: '用户不存在' }
+      return { status: 500, data: '用户不存在' }
     }
     if (comparePassword(password, user.password)) {
-      return { status: 200, message: '登陆成功' }
+      return { status: 200, data: user }
     } else {
-      return { status: 500, message: '密码错误' }
+      return { status: 500, data: '密码错误' }
     }
   }
 }
