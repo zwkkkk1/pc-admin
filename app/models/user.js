@@ -1,4 +1,5 @@
 import { login, register } from 'services/user'
+
 export default {
   namespace: 'user',
   state: {

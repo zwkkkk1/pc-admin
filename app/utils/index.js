@@ -1,12 +1,6 @@
-import Home from 'pages/home'
-import Login from 'pages/login'
-import ProductManage from 'pages/product/manage'
-import ProductReview from 'pages/product/review'
-import FrontUser from 'pages/user/front'
-import BackUser from 'pages/user/back'
-import Category from 'pages/category'
-
 const prefix = '/app'
+
+export { default as request } from './request'
 
 export const menuMap = [
   { icon: 'pie-chart', name: '商品管理', children: [
@@ -23,13 +17,11 @@ export const menuMap = [
 ]
 
 export const routeConfig = [
-  { path: 'pages/login', alias: '/login', component: Login },
-  { path: 'pages/home', alias: `${prefix}/`, component: Home, exact: true },
-  { path: 'pages/product/manage', alias: `${prefix}/product/manage`, component: ProductManage },
-  { path: 'pages/product/review', alias: `${prefix}/product/review`, component: ProductReview },
-  { path: 'pages/user/front', alias: `${prefix}/user/front`, component: FrontUser },
-  { path: 'pages/user/back', alias: `${prefix}/user/back`, component: BackUser },
-  { path: 'pages/category', alias: `${prefix}/category`, component: Category },
+  { alias: '/login', component: 'Login' },
+  { alias: `${prefix}/`, component: 'Home', exact: true },
+  { alias: `${prefix}/product/manage`, component: 'ProductManage', breadCrumb: '商品管理/商品管理' },
+  { alias: `${prefix}/product/review`, component: 'ProductReview', breadCrumb: '商品管理/商品审核' },
+  { alias: `${prefix}/user/front`, component: 'FrontUser', breadCrumb: '用户管理/前台用户管理' },
+  { alias: `${prefix}/user/back`, component: 'BackUser', breadCrumb: '用户管理/后台用户管理' },
+  { alias: `${prefix}/category`, component: 'Category', breadCrumb: '类目管理/类目管理' },
 ]
-
-export { default as request } from './request'

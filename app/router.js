@@ -1,9 +1,9 @@
 import React from 'react'
 import { Route, Router, Switch } from 'dva/router'
-import App from 'pages'
-import Login from 'pages/login'
-import NotFound from 'pages/NotFound'
+import Pages  from 'pages'
 import AuthRouter from 'components/AuthRouter'
+
+const { App, Login, NotFound } = Pages
 
 export default function (props) {
   const { history } = props
