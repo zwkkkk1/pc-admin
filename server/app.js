@@ -2,6 +2,7 @@ const Koa = require('koa')
 const mongoose = require('mongoose')
 const bodyParser = require('koa-bodyparser')
 const router = require('./router')
+const Jwt = require('./utils/token')
 
 const app = new Koa()
 
@@ -9,10 +10,26 @@ mongoose.connect('mongodb://localhost:27017/mall',{ useNewUrlParser: true }, asy
   if (err) {
     console.error('connect database error!')
     console.error(err)
-    return proces.exit(1)
+    return process.exit(1)
   }
 
   app.use(bodyParser())
+
+  app.use(async (ctx, next) => {
+    let token = ctx.request.headers.authorization;
+    if (ctx.request.url !== '/user/login' && ctx.request.url !== '/user/register') {
+      let result = new Jwt(token).verifyToken();
+      if (result === 'err') {
+        ctx.status = 403
+        ctx.body = '登录已过期,请重新登录'
+      } else {
+        await next();
+      }
+    } else {
+      await next()
+    }
+  })
+
   app
     .use(router.routes())
     .use(router.allowedMethods())

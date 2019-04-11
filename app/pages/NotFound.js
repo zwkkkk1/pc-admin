@@ -7,7 +7,7 @@ export default class NotFound extends React.PureComponent {
   state = {
     animated: ''
   }
-  
+
   enter = () => {
     this.setState({ animated: 'hinge' })
   }
@@ -15,7 +15,11 @@ export default class NotFound extends React.PureComponent {
   render() {
     return (
       <div className='notfound-wrapper'>
-        <img src={NotFoundImage} alt="404" className={`animated swing ${this.state.animated}`} onMouseEnter={this.enter} />
+        <img src={NotFoundImage}
+          alt='404'
+          className={`animated swing ${this.state.animated}`}
+          onMouseEnter={this.enter}
+        />
       </div>
     )
   }

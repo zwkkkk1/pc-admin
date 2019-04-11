@@ -5,10 +5,8 @@ import router from './router'
 import model from './models'
 
 const app = dva({
-  history: require('history').createBrowserHistory(),
-  onAction: createLogger(),
+  onAction: createLogger()
 })
-
 app.use(createLoading())
 
 model(app)

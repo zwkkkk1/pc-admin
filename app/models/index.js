@@ -1,5 +1,6 @@
+import UserModel from './user'
 const models = [
-  require('./user').default,
+  UserModel
 ]
 
 export default (app) => {

@@ -1,12 +1,15 @@
 const mongoose = require('mongoose')
+const Jwt = require('../utils/token')
 const Schema = mongoose.Schema
 const { hashPassword, comparePassword } = require('../utils/HashPassword')
 
+let UserModel
+
 const userSchema = new Schema({
   username: { type: String, trim: true, unique: true },
-  password: String,
+  password: String
 }, {
-  timestamps: true,
+  timestamps: true
 })
 
 userSchema.statics = {
@@ -24,7 +27,7 @@ userSchema.statics = {
     })
     return { status: 200, data: '注册成功' }
   },
-  
+
   login: async (...args) => {
     const { username, password } = args[0]
     const user = await UserModel.findOne({ username })
@@ -32,13 +35,22 @@ userSchema.statics = {
       return { status: 500, data: '用户不存在' }
     }
     if (comparePassword(password, user.password)) {
-      return { status: 200, data: user }
+      const token = new Jwt(user._id).generateToken()
+      return { status: 200, data: token }
     } else {
       return { status: 500, data: '密码错误' }
     }
+  },
+
+  get: async (id) => {
+    const user = await UserModel.findById(id, 'username _id')
+    if (!user) {
+      return { status: 500, data: '用户不存在' }
+    }
+    return { status: 200, data: user }
   }
 }
 
-const UserModel = mongoose.model('User', userSchema)
+UserModel = mongoose.model('User', userSchema)
 
 module.exports = UserModel

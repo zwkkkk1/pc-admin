@@ -1,0 +1,37 @@
+@import 'styles/mixins';
+
+.loading-wrapper {
+  width: 100%;
+  @include flex-center();
+  @include mask(rgba(255, 255, 255, .65));
+}
+
+// CSSTransition css样式
+// 入场动画
+.fade-enter .fade-appear {
+  opacity: 1;
+}
+
+.fade-enter-active .fade-appear-active {
+  opacity: 1;
+  transition: opacity .3s ease-in;
+}
+
+.fade-enter-done {
+  opacity: 1;
+}
+
+// 出场动画
+.fade-exit {
+  opacity: 1;
+}
+
+.fade-exit-active {
+  opacity: 1;
+  transition: opacity .3s ease-in;
+}
+
+.fade-exit-done {
+  opacity: 0;
+  display: none;
+}
