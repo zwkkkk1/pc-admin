@@ -1,5 +1,5 @@
 const Jwt = require('../utils/token')
-const UserModal = require('../model/user')
+const UserModal = require('../models/user')
 
 module.exports = {
   register: async (ctx) => {
@@ -24,6 +24,11 @@ module.exports = {
     } else {
       ctx.status = 403
     }
+  },
+  getBackList: async (ctx) => {
+    const res = await UserModal.getList('back')
+    ctx.body = res.data
+    ctx.status = res.status
   }
 }
 

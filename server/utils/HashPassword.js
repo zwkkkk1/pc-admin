@@ -8,13 +8,19 @@ const hashPassword = password => {
     bcrypt.genSalt(saltRounds, (err, salt) => {
       if (err) reject(err)
       bcrypt.hash(password, salt, (err, password) => {
-        if (err) reject (err)
+        if (err) reject(err)
         resolve({ salt, password })
       })
     })
   })
 }
 
-const comparePassword = bcrypt.compareSync
+const hashPasswordSync = password => {
+  const salt = bcrypt.genSaltSync(saltRounds)
+  const hash = bcrypt.hashSync(password, salt)
+  return { salt, hash }
+}
 
-module.exports = { hashPassword, comparePassword }
+const compareSync = bcrypt.compareSync
+
+module.exports = { hashPassword, hashPasswordSync, compareSync }

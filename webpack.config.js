@@ -1,27 +1,28 @@
 var path = require('path')
+var { url, port } = require('./utils/config')
 
 module.exports = {
   entry: path.join(__dirname, './app/index.js'),
   output: {
     path: path.join(__dirname, './dist'),
     filename: 'bundle.js',
-    publicPath: '/',
+    publicPath: '/'
   },
   module: {
     rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: ['babel-loader?cacheDirectory=true'],
+        use: ['babel-loader?cacheDirectory=true']
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader', 'postcss-loader'],
+        use: ['style-loader', 'css-loader', 'postcss-loader']
       },
       {
         test: /\.s(a|c)ss$/,
         exclude: /node_modules/,
-        use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
+        use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
       },
       {
         test: /\.(jpg|jpeg|png|gif)$/,
@@ -29,12 +30,12 @@ module.exports = {
           {
             loader: 'url-loader',
             options: {
-              limit: 8192,
-            },
-          },
-        ],
-      },
-    ],
+              limit: 8192
+            }
+          }
+        ]
+      }
+    ]
   },
   resolve: {
     alias: {
@@ -44,9 +45,9 @@ module.exports = {
       models: path.resolve(__dirname, 'app/models/'),
       images: path.resolve(__dirname, 'app/assets/images/'),
       styles: path.resolve(__dirname, 'app/styles/'),
-      services: path.resolve(__dirname, 'app/services/'),
+      services: path.resolve(__dirname, 'app/services/')
     },
-    extensions: ['.js', '.scss', '.css'],
+    extensions: ['.js', '.scss', '.css']
   },
   devServer: {
     port: 8080,
@@ -55,10 +56,10 @@ module.exports = {
     host: '0.0.0.0',
     proxy: {
       '/api': {
-        target: 'http://localhost:3000',
-        pathRewrite: { '^/api': '' },
-      },
-    },
+        target: `${url}:${port}`,
+        pathRewrite: { '^/api': '' }
+      }
+    }
   },
-  devtool: 'source-map',
+  devtool: 'source-map'
 }

@@ -2,9 +2,24 @@ import axios from 'axios'
 import { message } from 'antd'
 import { history } from 'utils'
 
+// 不用 token 的请求
+const whiteList = [
+  '/user/login',
+  '/user/register'
+]
+
 const instance = axios.create({
-  baseURL: '/api',
-  headers: { 'Authorization': localStorage.getItem('token') }
+  baseURL: '/api'
+})
+
+instance.interceptors.request.use((config) => {
+  if (whiteList.indexOf(config.url) === -1) {
+    const token = localStorage.getItem('token')
+    if (token) {
+      config.headers.Authorization = token
+    }
+  }
+  return config
 })
 
 instance.interceptors.response.use(({ data, status }) => {

@@ -1,9 +1,10 @@
-import { login, register, getUserByToken } from 'services/user'
+import { login, register, getUserByToken, getBackUserList } from 'services/user'
 
 export default {
   namespace: 'user',
   state: {
-    user: {}
+    user: {},
+    backList: []
   },
   effects: {
     * login({ payload: { user } }, { call }) {
@@ -11,9 +12,9 @@ export default {
       localStorage.setItem('token', result)
       return result
     },
-    * register({ payload: { user } }, { call, put }) {
+    * register({ payload: { user } }, { call }) {
       const result = yield call(register, user)
-      yield put({ type: 'setData', payload: { user: result } })
+      localStorage.setItem('token', result)
       return result
     },
     * logout(_, { put }) {
@@ -25,9 +26,13 @@ export default {
       const token = localStorage.getItem('token')
       if (token) {
         const result = yield call(getUserByToken, localStorage.getItem('token'))
-        yield put({ type: 'setData', payload: { user: result } })
+        yield put({ type: 'setData', payload: { user: result || {} } })
         return result
       }
+    },
+    * getBackUserList(_, { call, put }) {
+      const result = yield call(getBackUserList)
+      yield put({ type: 'setData', payload: { backList: result } })
     }
   },
   reducers: {

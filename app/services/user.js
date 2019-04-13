@@ -11,3 +11,7 @@ export const register = (user) => (
 export const getUserByToken = (token) => (
   request.get('/user/info/token', token)
 )
+
+export const getBackUserList = () => (
+  request.get('/user/back/list')
+)

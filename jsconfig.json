@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "experimentalDecorators": true,
-    "target": "ES6",
     "baseUrl": "./", //表示根路径
     "paths": {
       "components/*": ["./app/components/*"],
@@ -14,5 +13,7 @@
   },
   "exclude": [
     "dist",
+    "node_modules",
+    ".vscode",
   ],
 }

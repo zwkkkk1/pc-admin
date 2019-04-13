@@ -5,11 +5,13 @@ import './style'
 
 export default class myBreadcrumb extends React.Component {
   render() {
-    const { name, subName } = this.props
+    let { map } = this.props
+    map = `首页/${map}`
     return (
       <Breadcrumb style={{ margin: '16px 0' }}>
-        {subName && <Breadcrumb.Item>{subName}</Breadcrumb.Item>}
-        {name && <Breadcrumb.Item>{name}</Breadcrumb.Item>}
+        {map.split('/').map((item, index) => (
+          <Breadcrumb.Item key={`${item}_${index}`}>{item}</Breadcrumb.Item>
+        ))}
       </Breadcrumb>
     )
   }

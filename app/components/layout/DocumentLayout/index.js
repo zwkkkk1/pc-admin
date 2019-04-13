@@ -13,21 +13,13 @@ import './style'
 class DocumentLayout extends React.PureComponent {
   constructor(props) {
     super(props)
-    this.state = {
-      subName: '首页',
-      name: ''
-    }
     const { breadCrumb } = this.props
-    document.title = breadCrumb ? breadCrumb.split('/')[1] : '后台管理'
+    document.title = breadCrumb ? breadCrumb.split('/')[breadCrumb.split('/').length - 1] : '后台管理'
   }
 
   componentDidMount() {
-    const { breadCrumb, onEnter } = this.props
+    const { onEnter } = this.props
     onEnter && onEnter()
-    if (breadCrumb) {
-      const arr = breadCrumb.split('/')
-      this.setState({ subName: arr[0], name: arr[1] })
-    }
   }
 
   handleLogout() {
@@ -42,14 +34,12 @@ class DocumentLayout extends React.PureComponent {
   }
 
   render() {
-    const { user } = this.props
-    const { subName, name } = this.state
+    const { user, breadCrumb: map } = this.props
     return (
       <Layout>
         <Header className='layout-header'>
           <BreadCrumb
-            subName={subName}
-            name={name}
+            map={map}
           />
           {user && user.username && (
             <div className='header-right-wrapper'>
