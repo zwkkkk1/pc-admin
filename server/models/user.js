@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Jwt = require('../utils/token')
+const myError = require('../utils/error')
 const Schema = mongoose.Schema
 const { hashPasswordSync, compareSync } = require('../utils/hashPassword')
 
@@ -20,47 +21,47 @@ userSchema.statics = {
   register: async (...args) => {
     const { username, password } = args[0]
     if (username === '' || password === '') {
-      return { status: 401, data: '用户名或密码不得为空' }
+      throw new myError(401, '用户名或密码不得为空')
     }
     let user = await UserModel.findOne({ username })
     if (user) {
-      return { status: 409, data: '用户名已存在' }
+      throw new myError(409, '用户名已存在')
     }
     const { hash } = hashPasswordSync(password)
     user = await UserModel.create({ username, password: hash })
     const token = new Jwt(user.id).generateToken()
-    return { status: 200, data: token }
+    return token
   },
 
   login: async (...args) => {
     const { username, password } = args[0]
     const user = await UserModel.findOne({ username })
     if (!user) {
-      return { status: 500, data: '用户不存在' }
+      throw new myError(500, '用户不存在')
     }
     if (compareSync(password, user.password)) {
       const token = new Jwt(user._id).generateToken()
-      return { status: 200, data: token }
+      return token
     } else {
-      return { status: 500, data: '密码错误' }
+      throw new myError(500, '密码错误')
     }
   },
 
   get: async (id) => {
     const user = await UserModel.findById(id, 'username')
     if (!user) {
-      return { status: 403, data: '用户不存在，请重新登录' }
+      throw new myError(403, '用户不存在，请重新登录')
     }
-    return { status: 200, data: user }
+    return user
   },
 
   getList: async (type) => {
     const isAdmin = type === 'back'
     const list = await UserModel.find({ type: isAdmin ? 1 : 0 }, 'username loginAt status')
     if (list.length) {
-      return { status: 200, data: list }
+      return list
     }
-    return { status: 500, data: `获取${isAdmin ? '后台' : '前台'}用户列表` }
+    throw new myError(500, `获取${isAdmin ? '后台' : '前台'}用户列表`)
   }
 }
 

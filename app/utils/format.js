@@ -37,5 +37,6 @@ export const formatDate = (date, type = 'Y-M-D h:m:s') => {
 const isUrlRule = /^((?:http:)?\/\/www\.|(?:https:)?\/\/www\.|(?:http:)?\/\/|(?:https:)?\/\/)?[a-z0-9]+([-.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?((\/.*)|.*)?$/
 
 export const formatPath = (path) => {
-  return isUrlRule.test(path) ? path : `${config.baseUrl}${path}`
+  const { url, port } = config
+  return isUrlRule.test(path) ? path : `${url}:${port}${path}`
 }

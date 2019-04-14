@@ -1,5 +1,7 @@
 const multer = require('koa-multer')
 const path = require('path')
+const myError = require('../utils/error')
+const { uploadImageLimit: { type, limit } } = require('../../utils/config')
 
 const getFileName = () => {
   const date = new Date()
@@ -17,6 +19,16 @@ const storage = multer.diskStorage({
   }
 })
 
-const upload = multer({ storage })
+const upload = multer({
+  storage,
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.split('/')[0] !== 'image' || type.indexOf(file.mimetype.split('/')[1]) === -1) {
+      cb(null, false);
+      cb(new myError(503, '请上传jpg、jpeg、gif、png后缀图片'))
+    }
+    cb(null, true);
+  },
+  limits: { fieldSize: limit / 1024 / 1024 }
+})
 
 module.exports = upload
