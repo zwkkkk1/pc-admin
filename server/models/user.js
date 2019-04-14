@@ -18,8 +18,8 @@ const userSchema = new Schema({
 })
 
 userSchema.statics = {
-  register: async (...args) => {
-    const { username, password } = args[0]
+  register: async content => {
+    const { username, password } = content
     if (username === '' || password === '') {
       throw new myError(401, '用户名或密码不得为空')
     }
@@ -33,8 +33,8 @@ userSchema.statics = {
     return token
   },
 
-  login: async (...args) => {
-    const { username, password } = args[0]
+  login: async content => {
+    const { username, password } = content
     const user = await UserModel.findOne({ username })
     if (!user) {
       throw new myError(500, '用户不存在')
@@ -47,7 +47,7 @@ userSchema.statics = {
     }
   },
 
-  get: async (id) => {
+  get: async id => {
     const user = await UserModel.findById(id, 'username')
     if (!user) {
       throw new myError(403, '用户不存在，请重新登录')
@@ -55,7 +55,7 @@ userSchema.statics = {
     return user
   },
 
-  getList: async (type) => {
+  getList: async type => {
     const isAdmin = type === 'back'
     const list = await UserModel.find({ type: isAdmin ? 1 : 0 }, 'username loginAt status')
     if (list.length) {

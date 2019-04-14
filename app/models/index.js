@@ -1,6 +1,8 @@
 import UserModel from './user'
+import ProductModel from './product'
 const models = [
-  UserModel
+  UserModel,
+  ProductModel
 ]
 
 export default (app) => {

@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'dva'
-import { Form, Input, Tooltip, Icon, Button } from 'antd'
+import { Form, Input, Tooltip, Icon, Button, Message } from 'antd'
 import { PictureWall } from 'components'
 import { mapStateToProps, mapDispatchToProps } from './connect'
 
@@ -24,22 +24,19 @@ class ProductAdd extends React.PureComponent {
   }
 
   handleSubmit = (e) => {
+    const { productAdd, form: { validateFieldsAndScroll } } = this.props
     e.preventDefault()
-    this.props.form.validateFieldsAndScroll((err, values) => {
+    validateFieldsAndScroll(async (err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        const result = await productAdd(values)
+        if(result) (
+          Message.success('上传成功', 1)
+        )
+      } else {
+        Message.warning(err[Object.keys(err)[0]].errors[0].message, 1)
       }
     });
   }
-
-  // handleChange = (config) => {
-  //   const { fileList } = config
-  //   return fileList.map(file => ({
-  //     status: file.status,
-  //     uid: file.uid,
-  //     url: file.response ? file.response.data.url : file.url
-  //   }));
-  // }
 
   render() {
     const { form, form: { getFieldDecorator } } = this.props
