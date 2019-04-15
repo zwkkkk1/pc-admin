@@ -1,5 +1,14 @@
 const config = require('../../utils/config')
 
+const isUrlRule = /^((?:http:)?\/\/www\.|(?:https:)?\/\/www\.|(?:http:)?\/\/|(?:https:)?\/\/)?[a-z0-9]+([-.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?((\/.*)|.*)?$/
+
+export const formatPath = (path) => {
+  const { url, port } = config
+  return isUrlRule.test(path) ? path : `${url}:${port}${path}`
+}
+
+export const formatPrice = price => `${Math.floor(price / 100)}.${price % 100}`
+
 export const formatDate = (date, type = 'Y-M-D h:m:s') => {
   let timestamp = parseInt(new Date(date).getTime(), 10)
   let myDate
@@ -32,11 +41,4 @@ export const formatDate = (date, type = 'Y-M-D h:m:s') => {
   time = time.replace('m', m)
   time = time.replace('s', s)
   return time
-}
-
-const isUrlRule = /^((?:http:)?\/\/www\.|(?:https:)?\/\/www\.|(?:http:)?\/\/|(?:https:)?\/\/)?[a-z0-9]+([-.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?((\/.*)|.*)?$/
-
-export const formatPath = (path) => {
-  const { url, port } = config
-  return isUrlRule.test(path) ? path : `${url}:${port}${path}`
 }

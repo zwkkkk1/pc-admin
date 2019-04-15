@@ -44,7 +44,7 @@ class Application extends React.Component {
               exact={!!exact}
               key={`content_${alias}`}
               path={alias}
-              component={props => (
+              render={props => (
                   <DocumentLayout
                     breadCrumb={breadCrumb}
                     user={user}

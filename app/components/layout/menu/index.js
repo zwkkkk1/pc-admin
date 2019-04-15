@@ -8,18 +8,20 @@ export default class myMenu extends React.Component {
   renderItem(item, index) {
     const { handleClickMenu } = this.props
     const { icon, name, children, link } = item
-    if (!children || !children.length) { return (
+    if (!children || !children.length) {
+    return (
       <Menu.Item key={link} onClick={handleClickMenu.bind(this, item)}>
         {icon && <Icon type={icon} />}
         <span>{name}</span>
       </Menu.Item>
-    )}
+    )
+}
     return (
       <SubMenu
         title={<span><Icon type={icon}/><span>{name}</span></span>}
         key={`sub_${index}`}
       >
-        { children.map((child) => (
+        {children.map((child) => (
           this.renderItem(child)
         ))}
       </SubMenu>
@@ -29,7 +31,7 @@ export default class myMenu extends React.Component {
   render() {
     const { map } = this.props
     return (
-      <Menu theme="dark" mode="inline">
+      <Menu theme='dark' mode='inline'>
         {map.map((item, index) => this.renderItem(item, index))}
       </Menu>
     )

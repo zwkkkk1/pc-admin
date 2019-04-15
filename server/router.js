@@ -5,11 +5,19 @@ const Product = require('./routes/product')
 
 const router = new Router()
 
-router.post('/user/register', User.register)
-router.post('/user/login', User.login)
-router.get('/user/info/token', User.getInfoByToken)
-router.get('/user/back/list', User.getBackList)
-router.post('/common/upload', Common.upload)
-router.post('/product/add', Product.add)
+router
+  .post('/user/register', User.register)
+  .post('/user/login', User.login)
+  .get('/user/info/token', User.getInfoByToken)
+  .get('/user/back/list', User.getBackList)
+
+router
+  .post('/common/upload', Common.upload)
+
+router
+  .post('/product/add', Product.add)
+  .post('/product/edit', Product.edit)
+  .get('/product/list', Product.getList)
+  .get('/product/:id', Product.get)
 
 module.exports = router

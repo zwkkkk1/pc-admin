@@ -11,7 +11,7 @@ class PicturesWall extends React.Component {
     this.state = {
       previewVisible: false,
       previewImage: '',
-      fileList: this.props.list.map(item => ({ ...item, uid: imgUid--, url: formatPath(item.url) }))
+      fileList: this.props.list.map(item => ({ uid: imgUid--, url: item }))
     }
   }
 

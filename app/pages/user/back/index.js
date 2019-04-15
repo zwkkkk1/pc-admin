@@ -16,12 +16,12 @@ class Back extends React.PureComponent {
   render() {
     const { backList, loading } = this.props
     return (
-    <Table
-      dataSource={backList}
-      pagination={{ pageSize: 7 }}
-      loading={loading}
-      bordered
-    >
+      <Table
+        dataSource={backList}
+        pagination={{ pageSize: 7 }}
+        loading={loading}
+        bordered
+      >
         <Column
           title='编号'
           key='index'
@@ -32,25 +32,25 @@ class Back extends React.PureComponent {
           dataIndex='username'
           key='username'
         />
-      <Column
-        title='上次登录时间'
-        dataIndex='loginAt'
-        key='loginAt'
-        render={(text) => (<span>{formatDate(text)}</span>)}
-      />
-      <Column
-        title='状态'
-        dataIndex='status'
-        key='status'
-      />
-      <Column
-        title='操作'
-        key='action'
-        render={() => (
-          <a>冻结</a>
-        )}
-      />
-    </Table>
+        <Column
+          title='上次登录时间'
+          dataIndex='loginAt'
+          key='loginAt'
+          render={(text) => (<span>{formatDate(text)}</span>)}
+        />
+        <Column
+          title='状态'
+          dataIndex='status'
+          key='status'
+        />
+        <Column
+          title='操作'
+          key='action'
+          render={() => (
+            <a>冻结</a>
+          )}
+        />
+      </Table>
     )
   }
 }

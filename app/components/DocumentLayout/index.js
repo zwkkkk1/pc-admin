@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'dva'
 import { Layout, Modal } from 'antd'
 import { history } from 'utils'
-import BreadCrumb from '../BreadCrumb'
+import BreadCrumb from '../layout/BreadCrumb'
 import { mapStateToProps, mapDispatchToProps } from './connect'
 
 const { Header, Content } = Layout;
