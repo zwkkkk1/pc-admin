@@ -1,5 +1,6 @@
 import React from 'react'
 import { Menu, Icon } from 'antd';
+import { history } from 'utils'
 import './style'
 
 const SubMenu = Menu.SubMenu;
@@ -30,8 +31,9 @@ export default class myMenu extends React.Component {
 
   render() {
     const { map } = this.props
+    const { location: { pathname } } = history
     return (
-      <Menu theme='dark' mode='inline'>
+      <Menu theme='dark' mode='inline' defaultOpenKeys={['sub_0']} defaultSelectedKeys={[pathname]}>
         {map.map((item, index) => this.renderItem(item, index))}
       </Menu>
     )

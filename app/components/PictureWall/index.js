@@ -45,11 +45,15 @@ class PicturesWall extends React.Component {
   }
 
   uploadRequest = (config) => {
-    const { action, filename, file, onSuccess, onError } = config
+    const { action, filename, file, onSuccess, onError, onProgress } = config
     const formData = new FormData()
     formData.append(filename, file);
     request
-      .post(action, formData)
+      .post(action, formData, {
+        onUploadProgress: ({ total, loaded }) => {
+          onProgress({ percent: Math.round(loaded / total * 100).toFixed(2) }, file)
+        }
+      })
       .then((res) => {
         onSuccess(res, file);
       })

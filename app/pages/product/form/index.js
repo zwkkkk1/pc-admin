@@ -31,7 +31,7 @@ class ProductForm extends React.PureComponent {
   }
 
   render() {
-    const { form, form: { getFieldDecorator }, btnText, item: { images } } = this.props
+    const { form, form: { getFieldDecorator }, btnText, item } = this.props
     return (
       <Form
         labelCol={{ span: 6 }}
@@ -78,7 +78,7 @@ class ProductForm extends React.PureComponent {
             rules: [{
               required: true, message: '请上传至少一张商品图片'
             }]
-          })(<PictureWall number={3} form={form} list={images} />)}
+          })(<PictureWall number={3} form={form} list={item && item.images || []} />)}
         </Form.Item>
         <Form.Item wrapperCol={{ offset: 6 }}>
           <Button type='primary' htmlType='submit'>{btnText}</Button>
