@@ -47,6 +47,11 @@ userSchema.statics = {
     }
   },
 
+  update: async (id, content) => {
+    const result = await UserModel.findByIdAndUpdate(id, content)
+    return result
+  },
+
   get: async id => {
     const user = await UserModel.findById(id, 'username')
     if (!user) {

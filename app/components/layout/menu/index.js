@@ -11,7 +11,7 @@ export default class myMenu extends React.Component {
     const { icon, name, children, link } = item
     if (!children || !children.length) {
     return (
-      <Menu.Item key={link} onClick={handleClickMenu.bind(this, item)}>
+      <Menu.Item key={'/app' + link} onClick={handleClickMenu.bind(this, item)}>
         {icon && <Icon type={icon} />}
         <span>{name}</span>
       </Menu.Item>

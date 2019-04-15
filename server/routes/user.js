@@ -18,6 +18,7 @@ module.exports = {
     let id = new Jwt(content).verifyToken();
     if (id !== 'err') {
       const res = await UserModal.get(id)
+      await UserModal.update(id, { loginAt: Date.now() })
       ctx.body = res
     } else {
       throw new myError(403)

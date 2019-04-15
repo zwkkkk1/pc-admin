@@ -4,12 +4,13 @@ import { Route } from 'dva/router'
 import { Layout } from 'antd'
 import { DocumentLayout, Menu, Loading } from 'components'
 import Pages from 'pages'
-import { menuMap, routeConfig } from 'utils'
+import { menuMap, router } from 'utils'
 import { mapStateToProps, mapDispatchToProps } from './connect'
 
 import './style'
 
 const { Sider } = Layout;
+const { routes } = router
 
 @connect(mapStateToProps, mapDispatchToProps)
 class Application extends React.Component {
@@ -22,7 +23,7 @@ class Application extends React.Component {
 
   handleClickMenu(item) {
     const { link } = item
-    this.props.history.push(link)
+    this.props.history.push('/app' + link)
   }
 
   render() {
@@ -36,14 +37,15 @@ class Application extends React.Component {
             map={menuMap}
           />
         </Sider>
-          {routeConfig.app.map(route => {
-            const { exact, alias, component, breadCrumb } = route
+          {Object.keys(routes.app).map(key => {
+            const route = routes.app[key]
+            const { exact, component, breadCrumb } = route
             const Component = Pages[component]
             return (
             <Route
               exact={!!exact}
-              key={`content_${alias}`}
-              path={alias}
+              key={`content_${key}`}
+              path={key}
               render={props => (
                   <DocumentLayout
                     breadCrumb={breadCrumb}
