@@ -1,6 +1,7 @@
 import React from 'react'
 import { Upload, Icon, Modal, Message } from 'antd';
-import { request, formatPath } from 'utils'
+import { request, getYMD } from 'utils'
+import axios from 'axios'
 const { uploadImageLimit } = require('../../../utils/config')
 
 let imgUid = -1
@@ -49,24 +50,31 @@ class PicturesWall extends React.Component {
     const formData = new FormData()
     formData.append(filename, file);
     request
-      .post(action, formData, {
-        onUploadProgress: ({ total, loaded }) => {
-          onProgress({ percent: Math.round(loaded / total * 100).toFixed(2) }, file)
-        }
+      .post('/common/qiniuToken')
+      .then(token => {
+        formData.append('key', `${getYMD()}_${Date.now()}`)
+        formData.append('token', token)
+        formData.append('x:filename', file.name)
+        axios.post(action, formData, {
+          onUploadProgress: ({ total, loaded }) => {
+            console.log('onUploadProgress', loaded, total, Math.round(loaded / total * 100).toFixed(2))
+            onProgress({ percent: Math.round(loaded / total * 100).toFixed(2) }, file)
+          }
+        })
+        .then((res) => {
+          onSuccess(res, file)
+        })
+        .catch(onError)
       })
-      .then((res) => {
-        onSuccess(res, file);
-      })
-      .catch(onError)
   }
 
-  handleSuccess = (res) => {
-    const { path, originalname } = res
+  handleSuccess = ({ data }) => {
+    const { key } = data
     this.setState(prevState => {
       prevState.fileList.push({
-        url: formatPath(path),
+        url: `http://pq1kytk8k.bkt.clouddn.com/${key}`,
         status: 'done',
-        name: originalname,
+        name: data['x:filename'],
         uid: imgUid--
       })
       return {
@@ -81,6 +89,10 @@ class PicturesWall extends React.Component {
     }));
   }
 
+  showProgress = ({ percent }, file) => {
+    console.log('onProgress >>>', percent, file.name)
+  }
+
   render() {
     const { number } = this.props
     const { previewVisible, previewImage, fileList = []} = this.state;
@@ -93,12 +105,13 @@ class PicturesWall extends React.Component {
     return (
       <div className='clearfix'>
         <Upload
-          action='/common/upload'
+          action='http://upload-z2.qiniup.com'
           listType='picture-card'
           fileList={fileList}
           beforeUpload={this.handleBeforeUpload}
           customRequest={this.uploadRequest}
           onPreview={this.handlePreview}
+          onProgress={this.showProgress}
           onSuccess={this.handleSuccess}
           onRemove={this.handleRemove}
         >

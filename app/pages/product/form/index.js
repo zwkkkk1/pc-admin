@@ -19,14 +19,15 @@ class ProductForm extends React.PureComponent {
     e.preventDefault()
     const { handleSubmit, form: { validateFieldsAndScroll } } = this.props
     validateFieldsAndScroll(async (err, values) => {
-      if (!err) {
-        const result = await handleSubmit(values)
-        if(result) (
-          Message.success('编辑成功', 1).then(() => history.replace('/app/product/manage'))
-        )
-      } else {
-        Message.warning(err[Object.keys(err)[0]].errors[0].message, 1)
-      }
+      console.log('submit >>> ', values)
+      // if (!err) {
+      //   const result = await handleSubmit(values)
+      //   if(result) (
+      //     Message.success('编辑成功', 1).then(() => history.replace('/app/product/manage'))
+      //   )
+      // } else {
+      //   Message.warning(err[Object.keys(err)[0]].errors[0].message, 1)
+      // }
     });
   }
 

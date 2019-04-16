@@ -13,6 +13,7 @@ router
 
 router
   .post('/common/upload', Common.upload)
+  .post('/common/qiniuToken', Common.getQiniuToken)
 
 router
   .post('/product/add', Product.add)
