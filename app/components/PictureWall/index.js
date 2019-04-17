@@ -1,10 +1,10 @@
 import React from 'react'
-import { Upload, Icon, Modal, Message } from 'antd';
+import { Upload, Icon, Modal, Message, Progress } from 'antd';
 import { request, getYMD } from 'utils'
 import axios from 'axios'
 const { uploadImageLimit } = require('../../../utils/config')
 
-let imgUid = -1
+let uid
 
 class PicturesWall extends React.Component {
   constructor(props) {
@@ -12,14 +12,15 @@ class PicturesWall extends React.Component {
     this.state = {
       previewVisible: false,
       previewImage: '',
-      fileList: this.props.list.map(item => ({ uid: imgUid--, url: item }))
+      percent: 0
     }
   }
 
-  componentDidMount() {
-    this.props.form.setFieldsValue({
-      images: this.state.fileList
-    })
+  componentWillReceiveProps(nextProps) {
+    if (this.props.fileList !== nextProps.fileList) {
+      const { fileList } = nextProps
+      uid = fileList && fileList.length > 0 ? fileList[fileList.length - 1].uid - 1 : -1
+    }
   }
 
   handleCancel = () => this.setState({ previewVisible: false })
@@ -46,7 +47,14 @@ class PicturesWall extends React.Component {
   }
 
   uploadRequest = (config) => {
+    const { form: { setFieldsValue }, fileList: images } = this.props
     const { action, filename, file, onSuccess, onError, onProgress } = config
+    images.push({
+      uid,
+      name: file.name,
+      status: 'uploading'
+    })
+    setFieldsValue({ images })
     const formData = new FormData()
     formData.append(filename, file);
     request
@@ -57,45 +65,41 @@ class PicturesWall extends React.Component {
         formData.append('x:filename', file.name)
         axios.post(action, formData, {
           onUploadProgress: ({ total, loaded }) => {
-            console.log('onUploadProgress', loaded, total, Math.round(loaded / total * 100).toFixed(2))
             onProgress({ percent: Math.round(loaded / total * 100).toFixed(2) }, file)
           }
         })
         .then((res) => {
-          onSuccess(res, file)
+          onSuccess(res, uid--)
         })
         .catch(onError)
       })
   }
 
-  handleSuccess = ({ data }) => {
+  handleSuccess = ({ data }, file, uid) => {
     const { key } = data
-    this.setState(prevState => {
-      prevState.fileList.push({
-        url: `http://pq1kytk8k.bkt.clouddn.com/${key}`,
-        status: 'done',
-        name: data['x:filename'],
-        uid: imgUid--
-      })
-      return {
-        fileList: prevState.fileList
+    const { form: { setFieldsValue }, fileList: images } = this.props
+    images.forEach(image => {
+      if (image.uid === uid) {
+        image.url = `http://pq1kytk8k.bkt.clouddn.com/${key}`
+        image.status = 'done'
       }
     })
+    setFieldsValue({ images })
   }
 
-  handleRemove = (file) => {
-    this.setState(prevState => ({
-      fileList: prevState.fileList.filter((item) => item.uid !== file.uid)
-    }));
+  handleProgress = ({ percent }) => {
+    this.setState({ percent })
   }
 
-  showProgress = ({ percent }, file) => {
-    console.log('onProgress >>>', percent, file.name)
+  handleRemove = ({ uid }) => {
+    const { form: { setFieldsValue }, fileList: prevList } = this.props
+    const fileList = prevList.filter((item) => item.uid !== uid)
+    setFieldsValue({ images: fileList })
   }
 
   render() {
-    const { number } = this.props
-    const { previewVisible, previewImage, fileList = []} = this.state;
+    const { number, fileList = []} = this.props
+    const { previewVisible, previewImage, percent } = this.state;
     const uploadButton = (
       <div>
         <Icon type='plus' />
@@ -111,8 +115,8 @@ class PicturesWall extends React.Component {
           beforeUpload={this.handleBeforeUpload}
           customRequest={this.uploadRequest}
           onPreview={this.handlePreview}
-          onProgress={this.showProgress}
           onSuccess={this.handleSuccess}
+          onProgress={this.handleProgress}
           onRemove={this.handleRemove}
         >
           {fileList.length >= number ? null : uploadButton}
@@ -120,6 +124,7 @@ class PicturesWall extends React.Component {
         <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
           <img alt='example' style={{ width: '100%' }} src={previewImage} />
         </Modal>
+        <Progress percent={Number(percent)} />
       </div>
     );
   }

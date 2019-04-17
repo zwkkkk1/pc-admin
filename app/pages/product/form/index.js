@@ -7,11 +7,17 @@ import './style'
 
 const { TextArea } = Input
 
+let imgUid = -1
+
 class ProductForm extends React.PureComponent {
   componentDidMount() {
     const { item } = this.props
     if (item) {
-      this.props.form.setFieldsValue(item)
+      const { images, ...rest } = item
+      this.props.form.setFieldsValue({
+        ...rest,
+        images: images.map(item => ({ uid: imgUid--, url: item, status: 'done' }))
+      })
     }
   }
 
@@ -19,20 +25,19 @@ class ProductForm extends React.PureComponent {
     e.preventDefault()
     const { handleSubmit, form: { validateFieldsAndScroll } } = this.props
     validateFieldsAndScroll(async (err, values) => {
-      console.log('submit >>> ', values)
-      // if (!err) {
-      //   const result = await handleSubmit(values)
-      //   if(result) (
-      //     Message.success('编辑成功', 1).then(() => history.replace('/app/product/manage'))
-      //   )
-      // } else {
-      //   Message.warning(err[Object.keys(err)[0]].errors[0].message, 1)
-      // }
+      if (!err) {
+        const result = await handleSubmit({ ...values, images: values.images.map(({ url }) => url) })
+        if(result) (
+          Message.success('编辑成功', 1).then(() => history.replace('/app/product/manage'))
+        )
+      } else {
+        Message.warning(err[Object.keys(err)[0]].errors[0].message, 1)
+      }
     });
   }
 
   render() {
-    const { form, form: { getFieldDecorator }, btnText, item } = this.props
+    const { form, form: { getFieldDecorator }, btnText } = this.props
     return (
       <Form
         labelCol={{ span: 6 }}
@@ -79,7 +84,7 @@ class ProductForm extends React.PureComponent {
             rules: [{
               required: true, message: '请上传至少一张商品图片'
             }]
-          })(<PictureWall number={3} form={form} list={item && item.images || []} />)}
+          })(<PictureWall number={3} form={form} />)}
         </Form.Item>
         <Form.Item wrapperCol={{ offset: 6 }}>
           <Button type='primary' htmlType='submit'>{btnText}</Button>
