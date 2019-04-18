@@ -1,7 +1,6 @@
 import React from 'react'
 import { Upload, Icon, Modal, Message, Progress } from 'antd';
-import { request, getYMD } from 'utils'
-import axios from 'axios'
+import { upload } from 'utils'
 const { uploadImageLimit } = require('../../../utils/config')
 
 let uid = -1
@@ -48,7 +47,7 @@ class PicturesWall extends React.Component {
 
   uploadRequest = (config) => {
     const { form: { setFieldsValue }, fileList, field } = this.props
-    const { action, filename, file, onSuccess, onError, onProgress } = config
+    const { file, onSuccess } = config
     let currentUID = uid
     let images = fileList
     images.push({
@@ -57,24 +56,10 @@ class PicturesWall extends React.Component {
       status: 'uploading'
     })
     setFieldsValue({ [field]: [].concat(images) })
-    const formData = new FormData()
-    formData.append(filename, file);
-    request
-      .post('/common/qiniuToken')
-      .then(token => {
-        formData.append('key', `${getYMD()}_${Date.now()}`)
-        formData.append('token', token)
-        formData.append('x:filename', file.name)
-        axios.post(action, formData, {
-          onUploadProgress: ({ total, loaded }) => {
-            onProgress({ percent: Math.round(loaded / total * 100).toFixed(2) }, file)
-          }
-        })
-        .then((res) => {
-          onSuccess(res, currentUID)
-        })
-        .catch(onError)
-      })
+    upload.send({
+      ...config,
+      onSuccess: (res) => onSuccess(res, currentUID)
+    }, { prefix: 'test' })
   }
 
   handleSuccess = ({ data }, file, uid) => {

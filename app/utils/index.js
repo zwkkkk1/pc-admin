@@ -4,6 +4,8 @@ export { default as request } from './request'
 
 export { default as history } from './history'
 
+export { default as upload } from './upload'
+
 export * from './format'
 
 export const menuMap = [
@@ -35,14 +37,6 @@ export const routeConfig = {
   others: [
     { alias: '/login', component: 'Login' }
   ]
-}
-
-export const getYMD = () => {
-  const date = new Date()
-  const year = date.getFullYear()
-  const month = date.getMonth() > 8 ? date.getMonth() + 1 : `0${date.getMonth() + 1}`
-  const day = date.getDate()
-  return `${year}${month}${day}`
 }
 
 export const router = new Router(routeConfig, menuMap)
