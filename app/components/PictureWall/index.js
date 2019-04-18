@@ -4,7 +4,7 @@ import { request, getYMD } from 'utils'
 import axios from 'axios'
 const { uploadImageLimit } = require('../../../utils/config')
 
-let uid
+let uid = -1
 
 class PicturesWall extends React.Component {
   constructor(props) {
@@ -47,14 +47,16 @@ class PicturesWall extends React.Component {
   }
 
   uploadRequest = (config) => {
-    const { form: { setFieldsValue }, fileList: images } = this.props
+    const { form: { setFieldsValue }, fileList, field } = this.props
     const { action, filename, file, onSuccess, onError, onProgress } = config
+    let currentUID = uid
+    let images = fileList
     images.push({
       uid,
       name: file.name,
       status: 'uploading'
     })
-    setFieldsValue({ images })
+    setFieldsValue({ [field]: [].concat(images) })
     const formData = new FormData()
     formData.append(filename, file);
     request
@@ -69,7 +71,7 @@ class PicturesWall extends React.Component {
           }
         })
         .then((res) => {
-          onSuccess(res, uid--)
+          onSuccess(res, currentUID)
         })
         .catch(onError)
       })
@@ -77,14 +79,14 @@ class PicturesWall extends React.Component {
 
   handleSuccess = ({ data }, file, uid) => {
     const { key } = data
-    const { form: { setFieldsValue }, fileList: images } = this.props
+    const { form: { setFieldsValue }, fileList: images, field } = this.props
     images.forEach(image => {
       if (image.uid === uid) {
         image.url = `http://pq1kytk8k.bkt.clouddn.com/${key}`
         image.status = 'done'
       }
     })
-    setFieldsValue({ images })
+    setFieldsValue({ [field]: images })
   }
 
   handleProgress = ({ percent }) => {
@@ -92,13 +94,13 @@ class PicturesWall extends React.Component {
   }
 
   handleRemove = ({ uid }) => {
-    const { form: { setFieldsValue }, fileList: prevList } = this.props
+    const { form: { setFieldsValue }, fileList: prevList, field } = this.props
     const fileList = prevList.filter((item) => item.uid !== uid)
-    setFieldsValue({ images: fileList })
+    setFieldsValue({ [field]: fileList })
   }
 
   render() {
-    const { number, fileList = []} = this.props
+    const { number, fileList } = this.props
     const { previewVisible, previewImage, percent } = this.state;
     const uploadButton = (
       <div>
@@ -128,6 +130,11 @@ class PicturesWall extends React.Component {
       </div>
     );
   }
+}
+
+PicturesWall.defaultProps = {
+  fileList: [],
+  field: 'images'
 }
 
 export default PicturesWall

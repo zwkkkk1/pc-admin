@@ -13,10 +13,11 @@ class ProductForm extends React.PureComponent {
   componentDidMount() {
     const { item } = this.props
     if (item) {
-      const { images, ...rest } = item
+      const { images, mainImages, ...rest } = item
       this.props.form.setFieldsValue({
         ...rest,
-        images: images.map(item => ({ uid: imgUid--, url: item, status: 'done' }))
+        images: images.map(item => ({ uid: imgUid--, url: item, status: 'done' })),
+        mainImages: mainImages.map(item => ({ uid: imgUid--, url: item, status: 'done' }))
       })
     }
   }
@@ -26,7 +27,12 @@ class ProductForm extends React.PureComponent {
     const { handleSubmit, form: { validateFieldsAndScroll } } = this.props
     validateFieldsAndScroll(async (err, values) => {
       if (!err) {
-        const result = await handleSubmit({ ...values, images: values.images.map(({ url }) => url) })
+        const { images, mainImages, ...rest } = values
+        const result = await handleSubmit({
+          ...rest,
+          images: images.map(({ url }) => url),
+          mainImages: mainImages.map(({ url }) => url)
+        })
         if(result) (
           Message.success('编辑成功', 1).then(() => history.replace('/app/product/manage'))
         )
@@ -51,6 +57,23 @@ class ProductForm extends React.PureComponent {
             }]
           })(<Input />)}
         </Form.Item>
+        <Form.Item
+          label={(
+            <span>
+              商品图片&nbsp;
+              <Tooltip title='请上传小于4MB的PNG或JPG图片'>
+                <Icon type='question-circle-o' />
+              </Tooltip>
+            </span>
+          )}
+        >
+          {getFieldDecorator('mainImages', {
+            valuePropName: 'fileList',
+            rules: [{
+              required: true, message: '请上传至少一张商品主图'
+            }]
+          })(<PictureWall field='mainImages' number={3} form={form} />)}
+        </Form.Item>
         <Form.Item label='商品描述'>
           {getFieldDecorator('desc')(<TextArea autosize={{ minRows: 2, maxRows: 6 }} />)}
         </Form.Item>
@@ -72,7 +95,7 @@ class ProductForm extends React.PureComponent {
         <Form.Item
           label={(
             <span>
-              商品图片&nbsp;
+              图文详情&nbsp;
               <Tooltip title='请上传小于4MB的PNG或JPG图片'>
                 <Icon type='question-circle-o' />
               </Tooltip>
@@ -80,11 +103,8 @@ class ProductForm extends React.PureComponent {
           )}
         >
           {getFieldDecorator('images', {
-            valuePropName: 'fileList',
-            rules: [{
-              required: true, message: '请上传至少一张商品图片'
-            }]
-          })(<PictureWall number={3} form={form} />)}
+            valuePropName: 'fileList'
+          })(<PictureWall field='images' number={5} form={form} />)}
         </Form.Item>
         <Form.Item wrapperCol={{ offset: 6 }}>
           <Button type='primary' htmlType='submit'>{btnText}</Button>

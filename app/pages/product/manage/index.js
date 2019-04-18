@@ -47,9 +47,9 @@ class Manage extends React.PureComponent {
         />
         <Column
           title='预览图'
-          dataIndex='images'
-          key='images'
-          render={(text) => <img className='item-image' src={text[0]} />}
+          dataIndex='mainImages'
+          key='mainImages'
+          render={(images, record) => <img className='item-image' src={images[0] || record.images[0]} />}
         />
         <Column
           title='操作'

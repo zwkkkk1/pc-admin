@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const myError = require('../utils/error')
 
 // 后端接口返回的字段
-const backMap = 'name desc price status images _id'
+const backMap = 'name desc price status images mainImages _id'
 
 const Schema = mongoose.Schema
 
@@ -13,6 +13,7 @@ const productSchema = new Schema({
   desc: String,
   status: { type: Number, default: 1 },
   price: Number,
+  mainImages: Array,
   images: Array
 }, {
   timestamps: true
@@ -20,11 +21,11 @@ const productSchema = new Schema({
 
 productSchema.statics = {
   add: async content => {
-    const { name, price, images } = content
+    const { name, price, mainImages } = content
     myError.group([
       [ 503, '商品名称不得为空', !name ],
       [ 503, '商品价格不得为空', !price ],
-      [ 503, '请至少上传1张商品图片', !images.length ]
+      [ 503, '请至少上传1张商品主图', !mainImages.length ]
     ])
     const product = await ProductModel.create(content)
     return product

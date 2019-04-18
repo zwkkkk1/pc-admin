@@ -18,6 +18,11 @@ mongoose.connect('mongodb://localhost:27017/mall',{ useNewUrlParser: true }, asy
     return process.exit(1)
   }
 
+  app.use(async (ctx, next) => {
+    ctx.set('Access-Control-Allow-Origin', '*')
+    await next()
+  })
+
   // 设置 public 为静态资源目录
   app.use(serve(staticPath))
 
@@ -25,7 +30,7 @@ mongoose.connect('mongodb://localhost:27017/mall',{ useNewUrlParser: true }, asy
 
   app.use(errorMiddleware)
 
-  app.use(tokenMiddleware)
+  // app.use(tokenMiddleware)
 
   app
     .use(router.routes())
