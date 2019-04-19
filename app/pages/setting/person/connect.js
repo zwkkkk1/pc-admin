@@ -6,5 +6,6 @@ export const mapStateToProps = (state) => {
 }
 
 export const mapDispatchToProps = (dispatch) => ({
-  getLoginUserInfo: () => dispatch({ type: 'user/getLoginUserInfo' })
+  getLoginUserInfo: () => dispatch({ type: 'user/getLoginUserInfo' }),
+  modifyUserInfo: (content) => dispatch({ type: 'user/modifyUserInfo', payload: { content } })
 })

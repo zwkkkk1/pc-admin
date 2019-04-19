@@ -34,7 +34,7 @@ class DocumentLayout extends React.PureComponent {
   }
 
   render() {
-    const { user: { username, avatar }, breadCrumb: map, user } = this.props
+    const { user: { username, avatar, nickname }, breadCrumb: map, user } = this.props
     const dropMenu = (
       <Menu>
         <Menu.Item>
@@ -56,7 +56,7 @@ class DocumentLayout extends React.PureComponent {
             <Dropdown overlay={dropMenu}>
               <div className='header-right-wrapper'>
                 <Avatar className='avatar-img' src={avatar[0]} />
-                <p>{username}</p>
+                <p>{nickname || username}</p>
               </div>
             </Dropdown>
           )}

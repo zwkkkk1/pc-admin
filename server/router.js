@@ -8,7 +8,8 @@ const router = new Router()
 router
   .post('/user/register', User.register)
   .post('/user/login', User.login)
-  .get('/user/info/token', User.getInfoByToken)
+  .get('/user/info', User.getInfoByToken)
+  .post('/user/info', User.modifyInfo)
   .get('/user/back/list', User.getBackList)
 
 router

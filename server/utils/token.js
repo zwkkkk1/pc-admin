@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const jwt = require('jsonwebtoken')
+const myError = require('../utils/error')
 
 class Token {
   constructor(data) {
@@ -28,7 +29,7 @@ class Token {
         res = result.data || {}
       }
     } catch (err) {
-      res = 'err'
+      throw new myError(403)
     }
     return res
   }

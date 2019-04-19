@@ -6,6 +6,8 @@ export { default as history } from './history'
 
 export { default as upload } from './upload'
 
+export { default as config } from './config'
+
 export * from './format'
 
 export const menuMap = [
@@ -25,14 +27,14 @@ export const menuMap = [
 export const routeConfig = {
   app: [
     { alias: '/', component: 'Home', exact: true },
-    { alias: '/product/manage', component: 'ProductManage', breadCrumb: '商品中心/商品管理' },
+    { alias: '/product/manage', component: 'ProductManage' },
     { alias: '/product/add', component: 'ProductAdd', breadCrumb: '商品中心/商品管理/新增商品' },
     { alias: '/product/edit/:id', component: 'ProductEdit', breadCrumb: '商品中心/商品管理/编辑商品' },
-    { alias: '/product/review', component: 'ProductReview', breadCrumb: '商品中心/商品审核' },
-    { alias: '/user/front', component: 'FrontUser', breadCrumb: '用户中心/前台用户管理' },
-    { alias: '/user/back', component: 'BackUser', breadCrumb: '用户中心/后台用户管理' },
+    { alias: '/product/review', component: 'ProductReview' },
+    { alias: '/user/front', component: 'FrontUser' },
+    { alias: '/user/back', component: 'BackUser' },
     { alias: '/user/add', component: 'UserAdd', breadCrumb: '用户中心/用户注册' },
-    { alias: '/category', component: 'Category', breadCrumb: '类目中心/类目管理' },
+    { alias: '/category', component: 'Category' },
     { alias: '/setting/person', component: 'PersonSetting', breadCrumb: '设置/个人设置' }
   ],
   others: [

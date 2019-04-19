@@ -8,8 +8,12 @@ export const register = (user) => (
   request.post('/user/register', user)
 )
 
-export const getUserByToken = (token) => (
-  request.get('/user/info/token', token)
+export const getUserByToken = () => (
+  request.get('/user/info')
+)
+
+export const modifyUserInfo = (content) => (
+  request.post('/user/info', content)
 )
 
 export const getBackUserList = () => (

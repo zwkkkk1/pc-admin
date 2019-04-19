@@ -1,4 +1,4 @@
-import { login, register, getUserByToken, getBackUserList } from 'services/user'
+import { login, register, getUserByToken, getBackUserList, modifyUserInfo } from 'services/user'
 
 export default {
   namespace: 'user',
@@ -25,7 +25,7 @@ export default {
     * getLoginUserInfo(_, { call, put }) {
       const token = localStorage.getItem('token')
       if (token) {
-        const result = yield call(getUserByToken, localStorage.getItem('token'))
+        const result = yield call(getUserByToken)
         yield put({ type: 'setData', payload: { user: result || {} } })
         return result
       }
@@ -33,6 +33,11 @@ export default {
     * getBackUserList(_, { call, put }) {
       const result = yield call(getBackUserList)
       yield put({ type: 'setData', payload: { backList: result } })
+    },
+    * modifyUserInfo({ payload: { content } }, { call, select }) {
+      const prevInfo = yield select(state => state.user.user)
+      const result = yield call(modifyUserInfo, content)
+      return result
     }
   },
   reducers: {

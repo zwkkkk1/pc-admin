@@ -57,10 +57,14 @@ class PicturesWall extends React.Component {
 
   onFileChange = ({ fileList }) => {
     const { form: { setFieldsValue }, field } = this.props
-    this.setState({ fileList })
+    this.setState({ fileList: [...fileList]})
     setFieldsValue({ [field]: fileList.map((file) => {
-      const { url, response: { data } } = file
-      return url ? url : `http://pq1kytk8k.bkt.clouddn.com/${data.key}`
+        try{
+          const { url, response: { data } } = file
+          return url ? url : `http://pq1kytk8k.bkt.clouddn.com/${data.key}`
+        } catch(err) {
+          console.log(err)
+        }
       })
     })
   }
