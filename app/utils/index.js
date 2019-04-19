@@ -32,7 +32,8 @@ export const routeConfig = {
     { alias: '/user/front', component: 'FrontUser', breadCrumb: '用户中心/前台用户管理' },
     { alias: '/user/back', component: 'BackUser', breadCrumb: '用户中心/后台用户管理' },
     { alias: '/user/add', component: 'UserAdd', breadCrumb: '用户中心/用户注册' },
-    { alias: '/category', component: 'Category', breadCrumb: '类目中心/类目管理' }
+    { alias: '/category', component: 'Category', breadCrumb: '类目中心/类目管理' },
+    { alias: '/setting/person', component: 'PersonSetting', breadCrumb: '设置/个人设置' }
   ],
   others: [
     { alias: '/login', component: 'Login' }

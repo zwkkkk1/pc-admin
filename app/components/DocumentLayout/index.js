@@ -1,8 +1,8 @@
 import React from 'react'
 import { connect } from 'dva'
-import { Layout, Modal } from 'antd'
+import { Layout, Modal, Dropdown, Menu, Avatar } from 'antd'
 import { history } from 'utils'
-import BreadCrumb from '../layout/BreadCrumb'
+import { BreadCrumb } from 'components'
 import { mapStateToProps, mapDispatchToProps } from './connect'
 
 const { Header, Content } = Layout;
@@ -34,18 +34,31 @@ class DocumentLayout extends React.PureComponent {
   }
 
   render() {
-    const { user, breadCrumb: map } = this.props
+    const { user: { username, avatar }, breadCrumb: map, user } = this.props
+    const dropMenu = (
+      <Menu>
+        <Menu.Item>
+          <a href='/app/setting/person'>个人设置</a>
+        </Menu.Item>
+        <Menu.Item>
+          <a onClick={this.handleLogout.bind(this)}>退出</a>
+        </Menu.Item>
+      </Menu>
+    )
+
     return (
       <Layout>
         <Header className='layout-header'>
           <BreadCrumb
             map={map}
           />
-          {user && user.username && (
-            <div className='header-right-wrapper'>
-              <p>欢迎回来，{user.username}</p>
-              <a onClick={this.handleLogout.bind(this)}>退出</a>
-            </div>
+          {user && username && (
+            <Dropdown overlay={dropMenu}>
+              <div className='header-right-wrapper'>
+                <Avatar className='avatar-img' src={avatar} />
+                <p>{username}</p>
+              </div>
+            </Dropdown>
           )}
         </Header>
         <Content className='layout-content'>

@@ -6,11 +6,19 @@ const { hashPasswordSync, compareSync } = require('../utils/hashPassword')
 
 let UserModel
 
+// 后端接口返回的字段
+const backMap = 'username loginAt status avatar sex level sign nickname'
+
 const userSchema = new Schema({
   username: { type: String, trim: true, unique: true },
   password: String,
   loginAt: { type: Date, default: Date.now },
   status: { type: Number, default: 1 },
+  nickname: String,
+  avatar: String,
+  sign: String,
+  sex: { type: Number, default: 1 }, // 1 男 0 女
+  level: { type: Number, default: 1 },  // 1普通用户 2管理员 3超级管理员
   type: { type: Number, default: 1 }  // 0 为前台用户，1为后台用户
 }, {
   autoIndex: true,
@@ -53,7 +61,7 @@ userSchema.statics = {
   },
 
   get: async id => {
-    const user = await UserModel.findById(id, 'username')
+    const user = await UserModel.findById(id, backMap)
     if (!user) {
       throw new myError(403, '用户不存在，请重新登录')
     }
@@ -62,7 +70,7 @@ userSchema.statics = {
 
   getList: async type => {
     const isAdmin = type === 'back'
-    const list = await UserModel.find({ type: isAdmin ? 1 : 0 }, 'username loginAt status')
+    const list = await UserModel.find({ type: isAdmin ? 1 : 0 }, backMap)
     if (list.length) {
       return list
     }

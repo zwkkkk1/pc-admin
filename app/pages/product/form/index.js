@@ -92,7 +92,7 @@ class ProductForm extends React.PureComponent {
             }]
           })(<Input />)}
         </Form.Item>
-        <Form.Item
+        {/* <Form.Item
           label={(
             <span>
               图文详情&nbsp;
@@ -105,7 +105,7 @@ class ProductForm extends React.PureComponent {
           {getFieldDecorator('images', {
             valuePropName: 'fileList'
           })(<PictureWall field='images' number={5} form={form} />)}
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item wrapperCol={{ offset: 6 }}>
           <Button type='primary' htmlType='submit'>{btnText}</Button>
           <Button.Preset className='back-btn' type='back' />

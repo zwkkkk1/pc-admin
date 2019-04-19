@@ -1,7 +1,7 @@
 import React from 'react'
-import { Upload, Icon, Modal, Message, Progress } from 'antd';
+import { Icon, Progress } from 'antd';
+import { Upload } from 'components'
 import { upload } from 'utils'
-const { uploadImageLimit } = require('../../../utils/config')
 
 let uid = -1
 
@@ -9,8 +9,6 @@ class PicturesWall extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      previewVisible: false,
-      previewImage: '',
       percent: 0
     }
   }
@@ -22,40 +20,16 @@ class PicturesWall extends React.Component {
     }
   }
 
-  handleCancel = () => this.setState({ previewVisible: false })
-
-  handlePreview = (file) => {
-    this.setState({
-      previewImage: file.url || file.thumbUrl,
-      previewVisible: true
-    });
-  }
-
-  handleBeforeUpload = (file) => {
-    const { name, size } = file
-    const { type, limit } = uploadImageLimit
-    if (type.indexOf(name.split('.')[name.split('.').length - 1]) === -1) {
-      Message.error('只能上传jpg、jpeg、png、gif后缀图片')
-      return false
-    }
-    if (size > limit) {
-      Message.error(`只能上传小于${Math.floor(limit / 1024 / 1024)}M的图片`)
-      return false
-    }
-    return true
-  }
-
   uploadRequest = (config) => {
     const { form: { setFieldsValue }, fileList, field } = this.props
     const { file, onSuccess } = config
     let currentUID = uid
-    let images = fileList
-    images.push({
+    fileList.push({
       uid,
-      name: file.name,
-      status: 'uploading'
+      name: file.name
+      // status: 'uploading'
     })
-    setFieldsValue({ [field]: [].concat(images) })
+    setFieldsValue({ [field]: [].concat(fileList) })
     upload.send({
       ...config,
       onSuccess: (res) => onSuccess(res, currentUID)
@@ -86,7 +60,7 @@ class PicturesWall extends React.Component {
 
   render() {
     const { number, fileList } = this.props
-    const { previewVisible, previewImage, percent } = this.state;
+    const { percent } = this.state;
     const uploadButton = (
       <div>
         <Icon type='plus' />
@@ -96,21 +70,14 @@ class PicturesWall extends React.Component {
     return (
       <div className='clearfix'>
         <Upload
-          action='http://upload-z2.qiniup.com'
-          listType='picture-card'
           fileList={fileList}
-          beforeUpload={this.handleBeforeUpload}
           customRequest={this.uploadRequest}
-          onPreview={this.handlePreview}
           onSuccess={this.handleSuccess}
           onProgress={this.handleProgress}
           onRemove={this.handleRemove}
         >
           {fileList.length >= number ? null : uploadButton}
         </Upload>
-        <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-          <img alt='example' style={{ width: '100%' }} src={previewImage} />
-        </Modal>
         <Progress percent={Number(percent)} />
       </div>
     );
