@@ -27,7 +27,7 @@ class Application extends React.Component {
   }
 
   render() {
-    const { user, loading } = this.props
+    const { user, loading, user: { level: userLevel } } = this.props
     return (
       <Layout className='layout-wrapper'>
         <Loading visible={loading} />
@@ -35,12 +35,14 @@ class Application extends React.Component {
           <Menu
             handleClickMenu={this.handleClickMenu.bind(this)}
             map={menuMap}
+            user={user}
           />
         </Sider>
           {Object.keys(routes.app).map(key => {
             const route = routes.app[key]
-            const { exact, component, breadCrumb } = route
+            const { exact, component, breadCrumb, level } = route
             const Component = Pages[component]
+            if (userLevel < level) return
             return (
             <Route
               exact={!!exact}

@@ -12,15 +12,15 @@ export * from './format'
 
 export const menuMap = [
   { icon: 'pie-chart', name: '商品中心', children: [
-    { name: '商品管理', link: '/product/manage' },
-    { name: '商品审核', link: '/product/review' }
+    { name: '商品管理', link: '/product/manage', level: 1 },
+    { name: '商品审核', link: '/product/review', level: 2 }
   ]},
   { icon: 'user', name: '用户中心', children: [
-    { name: '前台用户管理', link: '/user/front' },
-    { name: '后台用户管理', link: '/user/back' }
+    { name: '前台用户管理', link: '/user/front', level: 2 },
+    { name: '后台用户管理', link: '/user/back', level: 3 }
   ]},
   { icon: 'team', name: '类目中心', children: [
-    { name: '类目管理', link: '/category' }
+    { name: '类目管理', link: '/category', level: 2 }
   ]}
 ]
 

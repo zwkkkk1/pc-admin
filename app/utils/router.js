@@ -22,8 +22,10 @@ class Router {
     menu.forEach(item => {
       const { name: subName } = item
       item.children.forEach(child => {
-        const { name, link } = child
-        this.routes.app[this.prefix + link].breadCrumb = `${subName}/${name}`
+        const { name, link, level } = child
+        const route = this.routes.app[this.prefix + link]
+        route.breadCrumb = `${subName}/${name}`
+        route.level = level
       })
     })
   }
