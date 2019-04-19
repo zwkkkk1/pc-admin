@@ -1,9 +1,11 @@
 import React from 'react'
 import { connect } from 'dva'
 import { Form, Button, Message, Input, Tooltip, Icon } from 'antd'
-import { AvatarUpload } from 'components'
+import { AvatarUpload, PictureWall } from 'components'
 import { history } from 'utils'
 import { mapStateToProps, mapDispatchToProps } from './connect'
+
+let imgUid = -1
 
 @connect(mapStateToProps, mapDispatchToProps)
 class Person extends React.PureComponent {
@@ -15,9 +17,14 @@ class Person extends React.PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!Object.keys(this.props.user).length && Object.keys(nextProps.user).length) {
+    const { user } = nextProps
+    if (!Object.keys(this.props.user).length && Object.keys(user).length) {
       const { form: { setFieldsValue } } = this.props
-      setFieldsValue({ ...nextProps.user })
+      const { avatar, ...restProps } = user
+      setFieldsValue({
+        ...restProps,
+        avatar: avatar.map(item => ({ uid: imgUid--, url: item, status: 'done' }))
+      })
     }
   }
 
@@ -35,7 +42,7 @@ class Person extends React.PureComponent {
   }
 
   render() {
-    const { form: { getFieldDecorator }, user: { avatar } } = this.props
+    const { form: { getFieldDecorator }, form } = this.props
     return (
       <div>
         <h4>个人设置</h4>
@@ -65,7 +72,9 @@ class Person extends React.PureComponent {
           {getFieldDecorator('level')(<Input />)}
         </Form.Item>
         <Form.Item label='头像'>
-          {getFieldDecorator('avatar')(<AvatarUpload imageUrl={avatar} />)}
+          {getFieldDecorator('avatar', {
+            valuePropName: 'fileList'
+          })(<PictureWall form={form} field='avatar' number={1} />)}
         </Form.Item>
         <Form.Item label='个性签名'>
           {getFieldDecorator('sign')(<Input />)}

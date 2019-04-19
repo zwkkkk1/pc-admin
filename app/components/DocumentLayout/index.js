@@ -55,7 +55,7 @@ class DocumentLayout extends React.PureComponent {
           {user && username && (
             <Dropdown overlay={dropMenu}>
               <div className='header-right-wrapper'>
-                <Avatar className='avatar-img' src={avatar} />
+                <Avatar className='avatar-img' src={avatar[0]} />
                 <p>{username}</p>
               </div>
             </Dropdown>

@@ -15,7 +15,7 @@ const userSchema = new Schema({
   loginAt: { type: Date, default: Date.now },
   status: { type: Number, default: 1 },
   nickname: String,
-  avatar: String,
+  avatar: Array,
   sign: String,
   sex: { type: Number, default: 1 }, // 1 男 0 女
   level: { type: Number, default: 1 },  // 1普通用户 2管理员 3超级管理员

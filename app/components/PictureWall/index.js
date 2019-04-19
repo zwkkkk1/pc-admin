@@ -3,37 +3,36 @@ import { Icon, Progress } from 'antd';
 import { Upload } from 'components'
 import { upload } from 'utils'
 
-let uid = -1
-
 class PicturesWall extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       percent: 0
     }
+    this.uid = -1
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.fileList !== nextProps.fileList) {
       const { fileList } = nextProps
-      uid = fileList && fileList.length > 0 ? fileList[fileList.length - 1].uid - 1 : -1
+      this.uid = fileList && fileList.length > 0 ? fileList[fileList.length - 1].uid - 1 : -1
     }
   }
 
   uploadRequest = (config) => {
     const { form: { setFieldsValue }, fileList, field } = this.props
     const { file, onSuccess } = config
-    let currentUID = uid
+    let currentUID = this.uid
     fileList.push({
-      uid,
-      name: file.name
-      // status: 'uploading'
+      uid: currentUID,
+      name: file.name,
+      status: 'uploading'
     })
     setFieldsValue({ [field]: [].concat(fileList) })
     upload.send({
       ...config,
       onSuccess: (res) => onSuccess(res, currentUID)
-    }, { prefix: 'test' })
+    }, { prefix: 'product' })
   }
 
   handleSuccess = ({ data }, file, uid) => {
@@ -58,9 +57,13 @@ class PicturesWall extends React.Component {
     setFieldsValue({ [field]: fileList })
   }
 
+  onFileChange = (fileList) => {
+    console.log('file change >>> ', fileList)
+  }
+
   render() {
     const { number, fileList } = this.props
-    const { percent } = this.state;
+    const { percent } = this.state
     const uploadButton = (
       <div>
         <Icon type='plus' />
@@ -75,6 +78,7 @@ class PicturesWall extends React.Component {
           onSuccess={this.handleSuccess}
           onProgress={this.handleProgress}
           onRemove={this.handleRemove}
+          onChange={this.onFileChange}
         >
           {fileList.length >= number ? null : uploadButton}
         </Upload>

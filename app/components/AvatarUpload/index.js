@@ -1,74 +1,57 @@
 import React from 'react'
-import { Upload, Icon, message } from 'antd';
+import { Icon } from 'antd';
+import { Upload } from 'components'
+import { upload } from 'utils'
 
 import './style.scss'
-
-function getBase64(img, callback) {
-  const reader = new FileReader();
-  reader.addEventListener('load', () => callback(reader.result));
-  reader.readAsDataURL(img);
-}
-
-function beforeUpload(file) {
-  const isJPG = file.type === 'image/jpeg';
-  if (!isJPG) {
-    message.error('You can only upload JPG file!');
-  }
-  const isLt2M = file.size / 1024 / 1024 < 2;
-  if (!isLt2M) {
-    message.error('Image must smaller than 2MB!');
-  }
-  return isJPG && isLt2M;
-}
 
 class Avatar extends React.Component {
   constructor(props) {
     super(props)
     this.state =  {
-      loading: false,
-      imageUrl: null
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (!this.props.imageUrl && nextProps.imageUrl) {
-      this.setState({
-        imageUrl: nextProps.imageUrl
-      })
+      loading: false
     }
   }
 
   handleChange = (info) => {
     if (info.file.status === 'uploading') {
-      this.setState({ loading: true });
+      this.setState({ loading: true })
       return;
     }
     if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj, imageUrl => this.setState({
-        imageUrl,
-        loading: false
-      }));
+      this.setState({ loading: false })
     }
   }
 
+  uploadRequest = (config) => {
+    const { form: { setFieldsValue } } = this.props
+    const { file } = config
+    setFieldsValue({ avatar: { name: file.name, status: 'uploading' } })
+    upload.send(config, { prefix: 'avatar' })
+  }
+
+  handleSuccess = (...rest) => {
+    console.log('success >>> ', rest)
+  }
+
   render() {
+    console.log('avatar >>> ', this.props)
+    const { value: imageUrl } = this.props
     const uploadButton = (
       <div>
         <Icon type={this.state.loading ? 'loading' : 'plus'} />
         <div className='ant-upload-text'>Upload</div>
       </div>
     );
-    const imageUrl = this.state.imageUrl;
     return (
       <Upload
         name='avatar'
         listType='picture-card'
         className='avatar-uploader'
-        showUploadList={false}
-        action='//jsonplaceholder.typicode.com/posts/'
-        beforeUpload={beforeUpload}
+        customRequest={this.uploadRequest}
         onChange={this.handleChange}
+        onSuccess={this.handleSuccess}
+        showUploadList={false}
       >
         {imageUrl ? <img src={imageUrl} className='avatar-img' alt='avatar' /> : uploadButton}
       </Upload>
