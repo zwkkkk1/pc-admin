@@ -23,7 +23,7 @@ class ProductEdit extends React.PureComponent {
     return (
       <div>
         <Loading visible={loading} />
-        {item && <ProductForm item={item} handleSubmit={this.handleSubmit} btnText='编辑' />}
+        {item && <ProductForm item={item} handleSubmit={this.handleSubmit} type='edit' />}
       </div>
     )
   }

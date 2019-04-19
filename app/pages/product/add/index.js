@@ -13,7 +13,7 @@ class ProductAdd extends React.PureComponent {
 
   render() {
     return (
-      <ProductForm btnText='添加' handleSubmit={this.handleSubmit} />
+      <ProductForm type='add' handleSubmit={this.handleSubmit} />
     )
   }
 }

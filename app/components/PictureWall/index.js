@@ -7,44 +7,41 @@ class PicturesWall extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      percent: 0
+      percent: 0,
+      fileList: []
     }
+    this.hasInit = !props.needInit
     this.uid = -1
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.fileList !== nextProps.fileList) {
+    if (this.props.fileList !== nextProps.fileList && !this.hasInit) {
       const { fileList } = nextProps
-      this.uid = fileList && fileList.length > 0 ? fileList[fileList.length - 1].uid - 1 : -1
+      const newlist = fileList.map(item => {
+        if (typeof item === 'string') {
+          return { uid: this.uid--, url: item, status: 'done' }
+        } else {
+          return item
+        }
+      })
+      this.setState({
+        fileList: newlist
+      })
+      this.hasInit = true
     }
   }
 
   uploadRequest = (config) => {
-    const { form: { setFieldsValue }, fileList, field } = this.props
-    const { file, onSuccess } = config
-    let currentUID = this.uid
-    fileList.push({
-      uid: currentUID,
+    const { form: { setFieldsValue }, field } = this.props
+    const { fileList: prevList } = this.state
+    const { file } = config
+    const fileList = [ ...prevList, {
+      uid: this.uid,
       name: file.name,
       status: 'uploading'
-    })
+    }]
     setFieldsValue({ [field]: [].concat(fileList) })
-    upload.send({
-      ...config,
-      onSuccess: (res) => onSuccess(res, currentUID)
-    }, { prefix: 'product' })
-  }
-
-  handleSuccess = ({ data }, file, uid) => {
-    const { key } = data
-    const { form: { setFieldsValue }, fileList: images, field } = this.props
-    images.forEach(image => {
-      if (image.uid === uid) {
-        image.url = `http://pq1kytk8k.bkt.clouddn.com/${key}`
-        image.status = 'done'
-      }
-    })
-    setFieldsValue({ [field]: images })
+    upload.send(config, { prefix: 'product' })
   }
 
   handleProgress = ({ percent }) => {
@@ -52,18 +49,25 @@ class PicturesWall extends React.Component {
   }
 
   handleRemove = ({ uid }) => {
-    const { form: { setFieldsValue }, fileList: prevList, field } = this.props
+    const { form: { setFieldsValue }, field } = this.props
+    const { fileList: prevList } = this.state
     const fileList = prevList.filter((item) => item.uid !== uid)
-    setFieldsValue({ [field]: fileList })
+    setFieldsValue({ [field]: fileList.map((item) => item.url) })
   }
 
-  onFileChange = (fileList) => {
-    console.log('file change >>> ', fileList)
+  onFileChange = ({ fileList }) => {
+    const { form: { setFieldsValue }, field } = this.props
+    this.setState({ fileList })
+    setFieldsValue({ [field]: fileList.map((file) => {
+      const { url, response: { data } } = file
+      return url ? url : `http://pq1kytk8k.bkt.clouddn.com/${data.key}`
+      })
+    })
   }
 
   render() {
-    const { number, fileList } = this.props
-    const { percent } = this.state
+    const { number } = this.props
+    const { percent, fileList } = this.state
     const uploadButton = (
       <div>
         <Icon type='plus' />
@@ -75,7 +79,6 @@ class PicturesWall extends React.Component {
         <Upload
           fileList={fileList}
           customRequest={this.uploadRequest}
-          onSuccess={this.handleSuccess}
           onProgress={this.handleProgress}
           onRemove={this.handleRemove}
           onChange={this.onFileChange}

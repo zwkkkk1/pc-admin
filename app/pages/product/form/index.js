@@ -7,18 +7,11 @@ import './style'
 
 const { TextArea } = Input
 
-let imgUid = -1
-
 class ProductForm extends React.PureComponent {
   componentDidMount() {
-    const { item } = this.props
+    const { item, form: { setFieldsValue } } = this.props
     if (item) {
-      const { images, mainImages, ...rest } = item
-      this.props.form.setFieldsValue({
-        ...rest,
-        images: images.map(item => ({ uid: imgUid--, url: item, status: 'done' })),
-        mainImages: mainImages.map(item => ({ uid: imgUid--, url: item, status: 'done' }))
-      })
+      setFieldsValue(item)
     }
   }
 
@@ -27,12 +20,7 @@ class ProductForm extends React.PureComponent {
     const { handleSubmit, form: { validateFieldsAndScroll } } = this.props
     validateFieldsAndScroll(async (err, values) => {
       if (!err) {
-        const { images, mainImages, ...rest } = values
-        const result = await handleSubmit({
-          ...rest,
-          images: images.map(({ url }) => url),
-          mainImages: mainImages.map(({ url }) => url)
-        })
+        const result = await handleSubmit(values)
         if(result) (
           Message.success('编辑成功', 1).then(() => history.replace('/app/product/manage'))
         )
@@ -43,7 +31,7 @@ class ProductForm extends React.PureComponent {
   }
 
   render() {
-    const { form, form: { getFieldDecorator }, btnText } = this.props
+    const { form, form: { getFieldDecorator }, type } = this.props
     return (
       <Form
         labelCol={{ span: 6 }}
@@ -72,7 +60,7 @@ class ProductForm extends React.PureComponent {
             rules: [{
               required: true, message: '请上传至少一张商品主图'
             }]
-          })(<PictureWall field='mainImages' number={3} form={form} />)}
+          })(<PictureWall needInit={type === 'edit'} field='mainImages' number={3} form={form} />)}
         </Form.Item>
         <Form.Item label='商品描述'>
           {getFieldDecorator('desc')(<TextArea autosize={{ minRows: 2, maxRows: 6 }} />)}
@@ -92,7 +80,7 @@ class ProductForm extends React.PureComponent {
             }]
           })(<Input />)}
         </Form.Item>
-        {/* <Form.Item
+        <Form.Item
           label={(
             <span>
               图文详情&nbsp;
@@ -104,10 +92,10 @@ class ProductForm extends React.PureComponent {
         >
           {getFieldDecorator('images', {
             valuePropName: 'fileList'
-          })(<PictureWall field='images' number={5} form={form} />)}
-        </Form.Item> */}
+          })(<PictureWall needInit={type === 'edit'} field='images' number={5} form={form} />)}
+        </Form.Item>
         <Form.Item wrapperCol={{ offset: 6 }}>
-          <Button type='primary' htmlType='submit'>{btnText}</Button>
+          <Button type='primary' htmlType='submit'>提交</Button>
           <Button.Preset className='back-btn' type='back' />
         </Form.Item>
       </Form>

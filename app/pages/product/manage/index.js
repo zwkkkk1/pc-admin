@@ -21,7 +21,7 @@ class Manage extends React.PureComponent {
     const { list, loading } = this.props
     return (
       <div>
-        <Button type='primary' href='/app/product/add'>新增商品</Button>
+        <Button type='primary' href='/app/product/add'>发布商品</Button>
         <Table
           className='product-list'
           dataSource={list}

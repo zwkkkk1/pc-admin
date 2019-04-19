@@ -20,11 +20,12 @@ class Person extends React.PureComponent {
     const { user } = nextProps
     if (!Object.keys(this.props.user).length && Object.keys(user).length) {
       const { form: { setFieldsValue } } = this.props
-      const { avatar, ...restProps } = user
-      setFieldsValue({
-        ...restProps,
-        avatar: avatar.map(item => ({ uid: imgUid--, url: item, status: 'done' }))
-      })
+      setFieldsValue(user)
+      // const { avatar, ...restProps } = user
+      // setFieldsValue({
+      //   ...restProps,
+      //   avatar: avatar.map(item => ({ uid: imgUid--, url: item, status: 'done' }))
+      // })
     }
   }
 
