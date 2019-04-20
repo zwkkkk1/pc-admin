@@ -13,6 +13,7 @@ export * from './format'
 export const menuMap = [
   { icon: 'pie-chart', name: '商品中心', children: [
     { name: '商品管理', link: '/product/manage', level: 1 },
+    { name: '商品列表', link: '/product/list', level: 1 },
     { name: '商品审核', link: '/product/review', level: 2 }
   ]},
   { icon: 'user', name: '用户中心', children: [
@@ -30,6 +31,7 @@ export const routeConfig = {
     { alias: '/product/manage', component: 'ProductManage' },
     { alias: '/product/add', component: 'ProductAdd', breadCrumb: '商品中心/商品管理/新增商品' },
     { alias: '/product/edit/:id', component: 'ProductEdit', breadCrumb: '商品中心/商品管理/编辑商品' },
+    { alias: '/product/list', component: 'ProductList' },
     { alias: '/product/review', component: 'ProductReview' },
     { alias: '/user/front', component: 'FrontUser' },
     { alias: '/user/back', component: 'BackUser' },

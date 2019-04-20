@@ -1,8 +1,7 @@
 export const mapStateToProps = (state) => {
-  const { product: { list }, loading, user: { user } } = state
+  const { product: { list }, loading } = state
   return {
     list,
-    user,
     loading: !!loading.effects['product/getList']
   }
 }

@@ -1,11 +1,12 @@
 import React from 'react'
 import { connect } from 'dva'
-import { Route } from 'dva/router'
+import { Route, Switch } from 'dva/router'
 import { Layout } from 'antd'
 import { DocumentLayout, Menu, Loading } from 'components'
 import Pages from 'pages'
 import { menuMap, router } from 'utils'
 import { mapStateToProps, mapDispatchToProps } from './connect'
+import NotFound from './NotFound'
 
 import './style'
 
@@ -38,6 +39,7 @@ class Application extends React.Component {
             user={user}
           />
         </Sider>
+        <Switch>
           {Object.keys(routes.app).map(key => {
             const route = routes.app[key]
             const { exact, component, breadCrumb, level } = route
@@ -58,6 +60,8 @@ class Application extends React.Component {
                 )}
             />)
           })}
+          <Route component={NotFound} />
+        </Switch>
       </Layout>
     );
   }

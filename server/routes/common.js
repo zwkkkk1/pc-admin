@@ -12,9 +12,7 @@ module.exports = {
     ctx.status = 200
   },
   getQiniuToken: async (ctx) => {
-    const accessKey = 'pYGzwV1AIIvBfpbkC9-wfRx1p1B_d5TJvY2Mf-QF';
-    const secretKey = 'xT3owIZjHtvfDNMS9FP_ekojnkBLbmvOesdCCxw8';
-    const bucket = 'graduation-product';
+    const { accessKey, secretKey, bucket } = config.qiniuConfig
     const mac = new qiniu.auth.digest.Mac(accessKey, secretKey)
     const options = {
       scope: bucket,

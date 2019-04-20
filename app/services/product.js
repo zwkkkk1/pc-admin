@@ -8,8 +8,10 @@ export const edit = (content, id) => (
   request.post('/product/edit', { ...content, id })
 )
 
-export const getList = () => (
-  request.get('/product/list')
+export const getList = (condition) => (
+  request.get('/product/list', {
+    params: condition
+  })
 )
 
 export const productGet = (id) => (

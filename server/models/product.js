@@ -10,6 +10,7 @@ let ProductModel
 
 const productSchema = new Schema({
   name: String,
+  uid: String,
   desc: String,
   status: { type: Number, default: 1 },
   price: Number,
@@ -42,12 +43,12 @@ productSchema.statics = {
     }
     return product
   },
-  getList: async () => {
-    const list = await ProductModel.find({}, backMap)
+  getList: async (condition) => {
+    const list = await ProductModel.find(condition, backMap)
     if (list.length) {
       return list
     }
-    throw new myError(500, '获取商品列表')
+    throw new myError(500, '获取商品列表失败')
   }
 }
 

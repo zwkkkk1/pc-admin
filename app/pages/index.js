@@ -4,9 +4,10 @@ import Login from './login'
 import NotFound from './NotFound'
 import Category from './category'
 import ProductManage from './product/manage'
-import ProductReview from './product/review'
 import ProductAdd from './product/add'
 import ProductEdit from './product/edit'
+import ProductList from './product/list'
+import ProductReview from './product/review'
 import FrontUser from './user/front'
 import BackUser from './user/back'
 import UserAdd from './user/add'
@@ -18,9 +19,10 @@ export default {
   Category,
   Login,
   ProductManage,
-  ProductReview,
   ProductAdd,
   ProductEdit,
+  ProductList,
+  ProductReview,
   FrontUser,
   BackUser,
   NotFound,

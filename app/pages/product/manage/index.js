@@ -1,20 +1,31 @@
 import React from 'react'
 import { connect } from 'dva'
-import { Table } from 'antd'
 import { Button } from 'components'
-import { formatPrice } from 'utils'
 import { mapStateToProps, mapDispatchToProps } from './connect'
-import './style'
-
-const { Column } = Table
+import ProductTable from '../component/table'
 
 @connect(mapStateToProps, mapDispatchToProps)
 class Manage extends React.PureComponent {
   componentDidMount() {
-    const { list, getProductList } = this.props
-    if (!list || !list.length) {
-      getProductList()
+    setTimeout(() => {
+      const { list, getProductList, user } = this.props
+      if (Object.keys(user).length && !list || !list.length) {
+        getProductList({ uid: user._id })
+      }
+    }, 0)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!Object.keys(this.props.user).length && Object.keys(nextProps.user).length) {
+      const { list, getProductList, user } = nextProps
+      if (!list || !list.length) {
+        getProductList({ uid: user._id })
+      }
     }
+  }
+
+  componentWillUnmount = async () => {
+    await this.props.clearList()
   }
 
   render() {
@@ -22,43 +33,7 @@ class Manage extends React.PureComponent {
     return (
       <div>
         <Button type='primary' href='/app/product/add'>发布商品</Button>
-        <Table
-          className='product-list'
-          dataSource={list}
-          pagination={{ pageSize: 7 }}
-          loading={loading}
-          bordered
-        >
-        <Column
-          title='编号'
-          key='index'
-          render={(text, record, index) => <span>{index + 1}</span>}
-        />
-        <Column
-          title='商品名称'
-          dataIndex='name'
-          key='name'
-        />
-        <Column
-          title='价格'
-          dataIndex='price'
-          key='price'
-          render={(text) => <span>￥{formatPrice(text)}</span>}
-        />
-        <Column
-          title='预览图'
-          dataIndex='mainImages'
-          key='mainImages'
-          render={(images, record) => <img className='item-image' src={images[0] || record.images[0]} />}
-        />
-        <Column
-          title='操作'
-          key='action'
-          render={(text, record) => (
-            <a href={`/app/product/edit/${record._id}`}>编辑</a>
-          )}
-        />
-      </Table>
+        <ProductTable list={list} loading={loading} />
       </div>
     )
   }

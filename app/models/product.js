@@ -7,16 +7,17 @@ export default {
     itemMap: {}
   },
   effects: {
-    * add({ payload: { content } }, { call }) {
-      const result = yield call(add, { ...content, images: content.images.map(item => item.url) })
+    * add({ payload: { content } }, { call, select }) {
+      const user = yield select(state => state.user.user)
+      const result = yield call(add, { ...content, uid: user._id })
       return result
     },
     * edit({ payload: { content, id } }, { call }) {
       const result = yield call(edit, content, id)
       return result
     },
-    * getList(_, { call, put }) {
-      const list = yield call(getList)
+    * getList({ payload: { condition } }, { call, put }) {
+      const list = yield call(getList, condition)
       yield put({ type: 'setData', payload: { list } })
     },
     * productGet({ payload: { id } }, { call, put, select }) {
@@ -24,6 +25,9 @@ export default {
       const result = yield call(productGet, id)
       itemMap[id] = result
       yield put({ type: 'setData', payload: { itemMap } })
+    },
+    * clearList(_, { put }) {
+      yield put({ type: 'setData', payload: { list: []} })
     }
   },
   reducers: {

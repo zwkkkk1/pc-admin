@@ -2,6 +2,7 @@ const Router = require('koa-router')
 const User = require('./routes/user')
 const Common = require('./routes/common')
 const Product = require('./routes/product')
+const Category = require('./routes/category')
 
 const router = new Router()
 
@@ -21,5 +22,10 @@ router
   .post('/product/edit', Product.edit)
   .get('/product/list', Product.getList)
   .get('/product/:id', Product.get)
+
+router
+  .post('/category', Category.post)
+  .delete('/category', Category.delete)
+  .get('/category/list', Category.getList)
 
 module.exports = router

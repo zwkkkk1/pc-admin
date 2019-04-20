@@ -17,7 +17,7 @@ module.exports = {
     ctx.body = res
   },
   getList: async (ctx) => {
-    const res = await ProductModel.getList()
+    const res = await ProductModel.getList(ctx.query)
     ctx.body = res
   }
 }

@@ -34,8 +34,7 @@ export default {
       const result = yield call(getBackUserList)
       yield put({ type: 'setData', payload: { backList: result } })
     },
-    * modifyUserInfo({ payload: { content } }, { call, select }) {
-      const prevInfo = yield select(state => state.user.user)
+    * modifyUserInfo({ payload: { content } }, { call }) {
       const result = yield call(modifyUserInfo, content)
       return result
     }

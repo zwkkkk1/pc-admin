@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'dva'
 import { Loading } from 'components'
-import ProductForm from '../form'
+import ProductForm from '../component/form'
 import { mapStateToProps, mapDispatchToProps } from './connect'
 
 @connect(mapStateToProps, mapDispatchToProps)
