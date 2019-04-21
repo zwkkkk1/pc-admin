@@ -1,15 +1,19 @@
 import React from 'react'
-import { Form, Input, Tooltip, Icon, Button, Message } from 'antd'
+import { connect } from 'dva'
+import { Form, Input, Tooltip, Icon, Button, Message, Cascader } from 'antd'
 import { PictureWall } from 'components'
 import { history } from 'utils'
+import { mapStateToProps, mapDispatchToProps } from './connect'
 
 import './style'
 
 const { TextArea } = Input
 
+@connect(mapStateToProps, mapDispatchToProps)
 class ProductForm extends React.PureComponent {
   componentDidMount() {
-    const { item, form: { setFieldsValue } } = this.props
+    const { item, form: { setFieldsValue }, getCategoryList } = this.props
+    getCategoryList({ level: 1 })
     if (item) {
       setFieldsValue(item)
     }
@@ -31,7 +35,7 @@ class ProductForm extends React.PureComponent {
   }
 
   render() {
-    const { form, form: { getFieldDecorator }, type } = this.props
+    const { form, form: { getFieldDecorator }, type, categoryList } = this.props
     return (
       <Form
         labelCol={{ span: 6 }}
@@ -44,6 +48,19 @@ class ProductForm extends React.PureComponent {
               required: true, message: '请输入商品名称'
             }]
           })(<Input />)}
+        </Form.Item>
+        <Form.Item
+          label='商品类目'
+        >
+          {getFieldDecorator('category', {
+            rules: [{ type: 'array', required: true, message: '请选择商品类目' }]
+          })(
+            <Cascader
+              placeholder='请选择商品类目'
+              options={categoryList}
+              fieldNames={{ label: 'name', value: '_id' }}
+            />
+          )}
         </Form.Item>
         <Form.Item
           label={(

@@ -1,4 +1,4 @@
-import { add, getList, productGet, edit } from '../services/product'
+import { add, edit, productDel, getList, productGet } from '../services/product'
 
 export default {
   namespace: 'product',
@@ -15,6 +15,9 @@ export default {
     * edit({ payload: { content, id } }, { call }) {
       const result = yield call(edit, content, id)
       return result
+    },
+    * delete({ payload: { id } }, { call }) {
+      return yield call(productDel, id)
     },
     * getList({ payload: { condition } }, { call, put }) {
       const list = yield call(getList, condition)

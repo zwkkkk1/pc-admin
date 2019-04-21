@@ -2,7 +2,8 @@ const mongoose = require('mongoose')
 const myError = require('../utils/error')
 
 // 后端接口返回的字段
-const backMap = 'name desc price status images mainImages _id'
+const backMap = require('../utils/backMap').product
+const userBackMap = require('../utils/backMap').user
 
 const Schema = mongoose.Schema
 
@@ -12,6 +13,7 @@ const productSchema = new Schema({
   name: String,
   uid: String,
   desc: String,
+  category: Array,
   status: { type: Number, default: 1 },
   price: Number,
   mainImages: Array,
@@ -31,9 +33,12 @@ productSchema.statics = {
     const product = await ProductModel.create(content)
     return product
   },
-  edit: async content => {
-    const { id, ...rest } = content
-    const result = await ProductModel.findByIdAndUpdate(id, rest)
+  edit: async (id, content) => {
+    const result = await ProductModel.findByIdAndUpdate(id, content)
+    return result
+  },
+  del: async (id) => {
+    const result = await ProductModel.findByIdAndRemove(id)
     return result
   },
   get: async id => {
@@ -44,11 +49,18 @@ productSchema.statics = {
     return product
   },
   getList: async (condition) => {
-    const list = await ProductModel.find(condition, backMap)
-    if (list.length) {
-      return list
+    if (condition.name) {
+      condition.name = new RegExp(condition.name)
     }
-    throw new myError(500, '获取商品列表失败')
+    const list = await ProductModel.find(condition, backMap).populate([{
+      path: 'category',
+      model: 'Category'
+    }, {
+      path: 'uid',
+      model: 'User',
+      select: userBackMap
+    }])
+    return list
   }
 }
 

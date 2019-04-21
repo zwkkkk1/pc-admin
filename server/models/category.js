@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const myError = require('../utils/error')
 
 // 后端接口返回的字段
-const backMap = 'name level createdAt childCategory'
+const backMap = require('../utils/backMap').category
 
 const Schema = mongoose.Schema
 
@@ -11,7 +11,7 @@ let CategoryModel
 const categorySchema = new Schema({
   name: String,
   level: { type: Number, default: 1 },
-  children: { type: Array, ref: 'Category' }
+  children: Array
 }, {
   timestamps: true
 })

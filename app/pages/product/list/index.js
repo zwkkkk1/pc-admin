@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'dva'
 import { mapStateToProps, mapDispatchToProps } from './connect'
 import ProductTable from '../component/table'
+import SearchForm from '../component/search'
 
 @connect(mapStateToProps, mapDispatchToProps)
 class List extends React.PureComponent {
@@ -21,7 +22,10 @@ class List extends React.PureComponent {
   render() {
     const { list, loading } = this.props
     return (
-     <ProductTable list={list} loading={loading} />
+      <div>
+        <SearchForm />
+        <ProductTable list={list} loading={loading} />
+      </div>
     )
   }
 }

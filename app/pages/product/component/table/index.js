@@ -4,10 +4,49 @@ import { formatPrice } from 'utils'
 
 import './style'
 
-
-const { Column } = Table
-
 export default class productTable extends React.PureComponent {
+  constructor(props) {
+    super(props)
+    const { exclude, renderAction } = props
+    this.state = {
+      columns: [{
+        title: '编号',
+        key: 'index',
+        render: (text, record, index) => <span>{index + 1}</span>
+      }, {
+        title: '商品名称',
+        key: 'name',
+        dataIndex: 'name'
+      }, {
+        title: '商品类目',
+        dataIndex: 'category',
+        key: 'category',
+        render: (category) => <span>{category.map(item => item.name).join(' / ')}</span>
+      }, {
+        title: '价格',
+        dataIndex: 'price',
+        key: 'price',
+        render: (price) => <span>￥{formatPrice(price)}</span>
+      }, {
+        title: '预览图',
+        dataIndex: 'mainImages',
+        key: 'mainImages',
+        render: (mainImages, record) => <img className='item-image' src={mainImages[0] || record.images[0]} />
+      }, {
+        title: '发布者',
+        dataIndex: 'uid',
+        key: 'uid',
+        render: ({ nickname, username }) => <span>{nickname || username}</span>
+      }, {
+        title: '操作',
+        key: 'action',
+        render: typeof renderAction !== 'function' ? (text, { _id }) => (
+          <a href={`/app/product/edit/${_id}`}>编辑</a>
+        ) : (...props) => renderAction(...props)
+      }].filter(col => exclude.indexOf(col.key) === -1)
+    }
+  }
+
   render() {
     const { list, loading } = this.props
     return (
@@ -16,38 +55,14 @@ export default class productTable extends React.PureComponent {
         dataSource={list}
         pagination={{ pageSize: 7 }}
         loading={loading}
+        columns={this.state.columns}
         bordered
-      >
-        <Column
-          title='编号'
-          key='index'
-          render={(text, record, index) => <span>{index + 1}</span>}
-        />
-        <Column
-          title='商品名称'
-          dataIndex='name'
-          key='name'
-        />
-        <Column
-          title='价格'
-          dataIndex='price'
-          key='price'
-          render={(text) => <span>￥{formatPrice(text)}</span>}
-        />
-        <Column
-          title='预览图'
-          dataIndex='mainImages'
-          key='mainImages'
-          render={(images, record) => <img className='item-image' src={images[0] || record.images[0]} />}
-        />
-        <Column
-          title='操作'
-          key='action'
-          render={(text, record) => (
-            <a href={`/app/product/edit/${record._id}`}>编辑</a>
-          )}
-        />
-      </Table>
+      />
     )
   }
+}
+
+productTable.defaultProps = {
+  exclude: [],
+  renderAction: null
 }

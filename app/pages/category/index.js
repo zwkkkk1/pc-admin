@@ -5,6 +5,13 @@ import { formatDate } from 'utils'
 import { mapStateToProps, mapDispatchToProps } from './connect'
 import Form from './component/form'
 
+const dataSetKey = (data) => data.map((item, index) => ({
+    ...item,
+    key: `${item.name}_${index}`,
+    children: item.children.map((child) => ({ ...child, key: `${item.name}_${child.name}` }))
+  }
+))
+
 @connect(mapStateToProps, mapDispatchToProps)
 class Category extends React.PureComponent {
   state = {
@@ -42,11 +49,12 @@ class Category extends React.PureComponent {
     }
   }
 
-  showEditModal = (content) => () => {
-    this.setState({ visible: true })
-    setTimeout(() => {
-      this.form.setFieldsValue(content)
-    }, 0)
+  showEditModal = ({ level, ...rest }) => () => {
+    this.setState({ visible: true, categoryLevel: level }, () => {
+      setTimeout(() => {
+        this.form.setFieldsValue(rest)
+      }, 0)
+    })
   }
 
   handleOk = () => {
@@ -67,8 +75,8 @@ class Category extends React.PureComponent {
   }
 
   handleCancel = () => {
-    this.setState({ visible: false, confirmLoading: false });
     this.form.resetFields()
+    this.setState({ visible: false, confirmLoading: false });
   }
 
   handleDelete = (id) => async () => {
@@ -115,7 +123,10 @@ class Category extends React.PureComponent {
     return (
       <div>
         <Button style={{ marginBottom: '10px' }} type='primary' onClick={this.showAddModal()}>添加一级类目</Button>
-        <Table columns={columns} dataSource={list} />
+        <Table
+          columns={columns}
+          dataSource={dataSetKey(list)}
+        />
         <Modal
           title='类目管理'
           visible={visible}

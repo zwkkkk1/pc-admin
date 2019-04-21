@@ -7,7 +7,7 @@ const { hashPasswordSync, compareSync } = require('../utils/hashPassword')
 let UserModel
 
 // 后端接口返回的字段
-const backMap = 'username loginAt status avatar sex level sign nickname'
+const backMap = require('../utils/backMap').user
 
 const userSchema = new Schema({
   username: { type: String, trim: true, unique: true },

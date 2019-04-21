@@ -19,7 +19,8 @@ router
 
 router
   .post('/product/add', Product.add)
-  .post('/product/edit', Product.edit)
+  .post('/product/:id', Product.edit)
+  .delete('/product/:id', Product.del)
   .get('/product/list', Product.getList)
   .get('/product/:id', Product.get)
 

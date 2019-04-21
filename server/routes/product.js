@@ -9,7 +9,11 @@ module.exports = {
   },
   edit: async (ctx) => {
     const content = ctx.request.body
-    await ProductModel.edit(content)
+    await ProductModel.edit(ctx.params.id, content)
+    ctx.status = 200
+  },
+  del: async (ctx) => {
+    await ProductModel.del(ctx.params.id)
     ctx.status = 200
   },
   get: async (ctx) => {

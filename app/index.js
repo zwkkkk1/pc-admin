@@ -1,11 +1,11 @@
 import dva from 'dva'
 import createLoading from 'dva-loading'
-import { createLogger } from 'redux-logger'
+// import { createLogger } from 'redux-logger'
 import router from './router'
 import model from './models'
 
 const app = dva({
-  onAction: createLogger()
+  // onAction: createLogger()
 })
 app.use(createLoading())
 
