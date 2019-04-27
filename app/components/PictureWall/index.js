@@ -41,7 +41,7 @@ class PicturesWall extends React.Component {
       status: 'uploading'
     }]
     setFieldsValue({ [field]: [].concat(fileList) })
-    upload.send(config, { prefix: 'product' })
+    upload.send(config)
   }
 
   handleProgress = ({ percent }) => {

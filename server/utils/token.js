@@ -29,7 +29,7 @@ class Token {
         res = result.data || {}
       }
     } catch (err) {
-      throw new myError(403)
+      throw new myError(403, '登录失效，请重新登录')
     }
     return res
   }

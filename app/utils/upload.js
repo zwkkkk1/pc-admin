@@ -11,7 +11,7 @@ const getYMD = (prefix) => {
 
 // upload 至七牛云
 class upload {
-  send(config, options) {
+  send(config, options = {}) {
     const { action, filename, file, onSuccess, onProgress } = config
     const { prefix } = options
     const formData = new FormData()
