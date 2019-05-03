@@ -1,6 +1,9 @@
 import React from 'react'
+import { connect } from 'dva'
 import { Table } from 'antd'
+import { TableHOC } from 'components'
 import { formatPrice } from 'utils'
+import { mapStateToProps, mapDispatchToProps, mergeProps } from './connect'
 
 import './style'
 
@@ -47,15 +50,19 @@ class productTable extends React.PureComponent {
     }
   }
 
+  componentWillUnmount = async () => {
+    await this.props.clearList()
+  }
+
   render() {
-    const { data, loading, pagination } = this.props
+    const { list: { data, num }, loading, onPageChange, args } = this.props
     return (
       <Table
         className='product-list'
         dataSource={data}
-        pagination={pagination}
         loading={loading}
         columns={this.state.columns}
+        pagination={{ pageSize: args.pageSize, onChange: onPageChange, total: num }}
         bordered
       />
     )
@@ -71,4 +78,4 @@ productTable.defaultProps = {
   renderAction: null
 }
 
-export default productTable
+export default connect(mapStateToProps, mapDispatchToProps, mergeProps, { withRef: true })(TableHOC(productTable))

@@ -1,10 +1,13 @@
 import React from 'react'
 import { Table } from 'antd'
+import { connect } from 'dva'
 import { formatDate } from 'utils'
+import { TableHOC } from 'components'
+import { mapStateToProps, mapDispatchToProps, mergeProps } from './connect'
 
 import './style'
 
-export default class userTable extends React.PureComponent {
+class userTable extends React.PureComponent {
   constructor(props) {
     super(props)
     const { exclude, renderAction } = props
@@ -36,14 +39,18 @@ export default class userTable extends React.PureComponent {
     }
   }
 
+  componentWillUnmount = async () => {
+    await this.props.clearList()
+  }
+
   render() {
-    const { list, loading, pagination } = this.props
+    const { list: { data, num }, loading, onPageChange, args } = this.props
     return (
       <Table
         className='list'
-        dataSource={list}
+        dataSource={data}
         loading={loading}
-        pagination={pagination}
+        pagination={{ pageSize: args.pageSize, onChange: onPageChange, total: num }}
         columns={this.state.columns}
         bordered
       />
@@ -55,3 +62,5 @@ userTable.defaultProps = {
   exclude: [],
   renderAction: null
 }
+
+export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(TableHOC(userTable))
