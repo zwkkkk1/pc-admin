@@ -1,28 +1,18 @@
 import React from 'react'
 import { connect } from 'dva'
 import { Divider, Popconfirm } from 'antd'
-import { Button } from 'components'
+import { Button, TableHOC } from 'components'
 import { mapStateToProps, mapDispatchToProps } from './connect'
 import ProductTable from '../component/table'
 import SearchForm from '../component/search'
 
 @connect(mapStateToProps, mapDispatchToProps)
 class Manage extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      args: {
-        pageSize: 7,
-        pageNo: 1
-      }
-    }
-  }
-
   componentDidMount() {
     setTimeout(() => {
-      const { list, user } = this.props
+      const { list, user, changeArgs } = this.props
       if (Object.keys(user).length && !list || !list.length) {
-        this.setState(({ args }) => ({
+        changeArgs(({ args }) => ({
             args: { ...args, uid: user._id }
           })
         );
@@ -30,11 +20,11 @@ class Manage extends React.Component {
     }, 0)
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (this.state.args !== nextState.args) {
-      nextProps.getProductList(nextState.args)
+  componentWillReceiveProps = (nextProps) => {
+    const { args, getProductList } = nextProps
+    if (this.props.args !== args) {
+      getProductList(args)
     }
-    return true
   }
 
   componentWillUnmount = async () => {
@@ -42,27 +32,21 @@ class Manage extends React.Component {
   }
 
   handleChange = (id, status) => {
-    const { productEdit, getProductList } = this.props
+    const { productEdit, getProductList, args } = this.props
     productEdit({ status: status ? 0 : 1 }, id).then(() => {
-      getProductList(this.state.args)
+      getProductList(args)
     })
   }
 
-  handlePageChange = (page) => {
-    this.setState(({ args }) => ({
-      args: { ...args, pageNo: page }
-    }))
-  }
-
   handleDelete = (id) => {
-    const { productDelete, getProductList } = this.props
+    const { productDelete, getProductList, args } = this.props
     productDelete(id).then(() => {
-      getProductList()
+      getProductList(args)
     })
   }
 
   render() {
-    const { list: { data, num }, loading, user: { level } } = this.props
+    const { list: { data, num }, loading, user: { level }, args, onPageChange } = this.props
     return (
       <div>
         <Button type='primary' href='/app/product/add'>发布商品</Button>
@@ -72,7 +56,7 @@ class Manage extends React.Component {
             exclude={['uid']}
             data={data}
             loading={loading}
-            pagination={{ pageSize: this.state.args.pageSize, onChange: this.handlePageChange, total: num }}
+            pagination={{ pageSize: args.pageSize, onChange: onPageChange, total: num }}
             renderAction={(text, { _id, status }) => (
             <span>
               <a href={`/app/product/edit/${_id}`}>编辑</a>
@@ -92,4 +76,4 @@ class Manage extends React.Component {
   }
 }
 
-export default Manage
+export default TableHOC(Manage)

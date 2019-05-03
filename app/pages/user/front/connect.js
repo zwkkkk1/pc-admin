@@ -1,11 +1,11 @@
 export const mapStateToProps = (state) => {
-  const { user: { frontList }, loading } = state
+  const { user: { list }, loading } = state
   return {
-    frontList,
-    loading: !!loading.effects['user/getFrontUserList']
+    list,
+    loading: !!loading.effects['user/getUserList']
   }
 }
 
 export const mapDispatchToProps = (dispatch) => ({
-  getFrontUserList: (condition) => dispatch({ type: 'user/getFrontUserList', payload: { condition } })
+  getUserList: (condition) => dispatch({ type: 'user/getUserList', payload: { condition: { ...condition, type: 'front' } } })
 })

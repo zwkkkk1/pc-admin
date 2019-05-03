@@ -9,8 +9,7 @@ export default {
   namespace: 'user',
   state: {
     user: {},
-    frontList: initList,
-    backList: initList
+    list: initList
   },
   effects: {
     * login({ payload: { user } }, { call }) {
@@ -36,17 +35,16 @@ export default {
         return result
       }
     },
-    * getFrontUserList({ payload: { condition } }, { call, put }) {
-      const result = yield call(getUserList, { ...condition, type: 'front' })
-      yield put({ type: 'setData', payload: { frontList: result } })
-    },
-    * getBackUserList({ payload: { condition } }, { call, put }) {
-      const result = yield call(getUserList, { ...condition, type: 'back' })
-      yield put({ type: 'setData', payload: { backList: result } })
+    * getUserList({ payload: { condition } }, { call, put }) {
+      const result = yield call(getUserList, condition)
+      yield put({ type: 'setData', payload: { list: result } })
     },
     * modifyUserInfo({ payload: { content } }, { call }) {
       const result = yield call(modifyUserInfo, content)
       return result
+    },
+    * clearList(_, { put }) {
+      yield put({ type: 'setData', payload: { list: initList } })
     }
   },
   reducers: {

@@ -4,7 +4,7 @@ import { formatPrice } from 'utils'
 
 import './style'
 
-export default class productTable extends React.PureComponent {
+class productTable extends React.PureComponent {
   constructor(props) {
     super(props)
     const { exclude, renderAction } = props
@@ -70,3 +70,5 @@ productTable.defaultProps = {
   exclude: [],
   renderAction: null
 }
+
+export default productTable

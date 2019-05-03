@@ -1,48 +1,33 @@
 import React from 'react'
 import { connect } from 'dva'
+import { TableHOC } from 'components'
 import { mapStateToProps, mapDispatchToProps } from './connect'
 import UserTable from '../component/table'
 
 @connect(mapStateToProps, mapDispatchToProps)
 class Back extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      args: {
-        pageSize: 7,
-        pageNo: 1
-      }
-    }
-  }
-
   componentDidMount() {
-    const { getBackUserList } = this.props
-    getBackUserList(this.state.args)
+    const { getUserList, args } = this.props
+    getUserList(args)
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (this.state.args !== nextState.args) {
-      nextProps.getProductList(nextState.args)
+  componentWillReceiveProps(nextProps) {
+    const { getUserList, args } = nextProps
+    if (this.props.args !== args) {
+      getUserList(args)
     }
-    return true
-  }
-
-  handlePageChange = (page) => {
-    this.setState(({ args }) => ({
-      args: { ...args, pageNo: page }
-    }))
   }
 
   render() {
-    const { backList: { data, num }, loading } = this.props
+    const { list: { data, num }, loading, onPageChange, args } = this.props
     return (
       <UserTable
         list={data}
         loading={loading}
-        pagination={{ pageSize: this.state.args.pageSize, onChange: this.handlePageChange, total: num }}
+        pagination={{ pageSize: args.pageSize, onChange: onPageChange, total: num }}
       />
     )
   }
 }
 
-export default Back
+export default TableHOC(Back)
