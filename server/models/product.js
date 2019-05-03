@@ -14,7 +14,7 @@ const productSchema = new Schema({
   uid: String,
   desc: String,
   category: Array,
-  status: { type: Number, default: 1 },
+  status: { type: Number, default: 1 }, // 0 下架，1 正常，-1 待审核
   price: Number,
   mainImages: Array,
   images: Array
