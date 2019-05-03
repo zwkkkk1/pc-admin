@@ -18,8 +18,7 @@ const userSchema = new Schema({
   avatar: Array,
   sign: String,
   sex: { type: Number, default: 1 }, // 1 男 0 女
-  level: { type: Number, default: 1 },  // 1普通用户 2管理员 3超级管理员
-  type: { type: Number, default: 1 }  // 0 为前台用户，1为后台用户
+  level: { type: Number, default: 1 }  // 1普通用户 2管理员 3超级管理员
 }, {
   autoIndex: true,
   timestamps: true
@@ -68,13 +67,16 @@ userSchema.statics = {
     return user
   },
 
-  getList: async type => {
-    const isAdmin = type === 'back'
-    const list = await UserModel.find({ type: isAdmin ? 1 : 0 }, backMap)
-    if (list.length) {
-      return list
+  getList: async ({ type, pageSize, pageNo, ...restParams }) => {
+    const level = type === 'back' ? { $gt: 1 } : { $lte: 1 }
+    const condition = { level, ...restParams }
+    const list = await UserModel.find(condition, backMap, (err) => {
+      if (err) throw new myError('获取用户列表失败')
+    }).skip((pageNo - 1) * pageSize).limit(Number(pageSize))
+    return {
+      data: list,
+      num: await UserModel.count(condition)
     }
-    throw new myError(500, `获取${isAdmin ? '后台' : '前台'}用户列表`)
   }
 }
 

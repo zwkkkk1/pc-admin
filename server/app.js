@@ -5,6 +5,7 @@ const serve = require('koa-static')
 const router = require('./router')
 const config = require('./utils/config')
 const { port } = require('../utils/config')
+const { accessLogger } = require('./utils/logger')
 const errorMiddleware = require('./middleware/error')
 const tokenMiddleware = require('./middleware/token')
 
@@ -26,11 +27,13 @@ mongoose.connect('mongodb://localhost:27017/mall',{ useNewUrlParser: true }, asy
   // 设置 public 为静态资源目录
   app.use(serve(staticPath))
 
+  app.use(accessLogger())
+
   app.use(bodyParser())
 
   app.use(errorMiddleware)
 
-  // app.use(tokenMiddleware)
+  app.use(tokenMiddleware)
 
   app
     .use(router.routes())

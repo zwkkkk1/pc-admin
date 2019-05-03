@@ -1,56 +1,42 @@
 import React from 'react'
-import { Table } from 'antd'
 import { connect } from 'dva'
-import { formatDate } from 'utils'
 import { mapStateToProps, mapDispatchToProps } from './connect'
-
-const { Column } = Table
+import UserTable from '../component/table'
 
 @connect(mapStateToProps, mapDispatchToProps)
-class Front extends React.PureComponent {
+class Front extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      args: {
+        pageSize: 7,
+        pageNo: 1
+      }
+    }
+  }
+
   componentDidMount() {
-    const { getBackUserList } = this.props
-    getBackUserList()
+    const { getFrontUserList } = this.props
+    getFrontUserList(this.state.args)
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.state.args !== nextState.args) {
+      nextProps.getProductList(nextState.args)
+    }
+    return true
+  }
+
+  handlePageChange = (page) => {
+    this.setState(({ args }) => ({
+      args: { ...args, pageNo: page }
+    }))
   }
 
   render() {
-    const { backList, loading } = this.props
+    const { frontList, loading } = this.props
     return (
-      <Table
-        dataSource={backList}
-        pagination={{ pageSize: 7 }}
-        loading={loading}
-        bordered
-      >
-        <Column
-          title='编号'
-          key='index'
-          render={(text, record, index) => (<span>{index + 1}</span>)}
-        />
-        <Column
-          title='用户名'
-          dataIndex='username'
-          key='username'
-        />
-        <Column
-          title='上次登录时间'
-          dataIndex='loginAt'
-          key='loginAt'
-          render={(text) => (<span>{formatDate(text)}</span>)}
-        />
-        <Column
-          title='状态'
-          dataIndex='status'
-          key='status'
-        />
-        <Column
-          title='操作'
-          key='action'
-          render={() => (
-            <a>冻结</a>
-          )}
-        />
-      </Table>
+      <UserTable list={frontList} loading={loading} onPageChange={this.handlePageChange} />
     )
   }
 }

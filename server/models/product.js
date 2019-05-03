@@ -49,18 +49,24 @@ productSchema.statics = {
     return product
   },
   getList: async (condition) => {
+    const { pageSize, pageNo, ...restParams } = condition
     if (condition.name) {
       condition.name = new RegExp(condition.name)
     }
-    const list = await ProductModel.find(condition, backMap).populate([{
+    const list = await ProductModel.find(restParams, backMap, (err) => {
+      if (err) throw new myError('获取商品列表失败')
+    }).populate([{
       path: 'category',
       model: 'Category'
     }, {
       path: 'uid',
       model: 'User',
       select: userBackMap
-    }])
-    return list
+    }]).skip((pageNo - 1) * pageSize).limit(Number(pageSize))
+    return {
+      data: list,
+      num: await ProductModel.count(restParams)
+    }
   }
 }
 

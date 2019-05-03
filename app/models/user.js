@@ -1,9 +1,10 @@
-import { login, register, getUserByToken, getBackUserList, modifyUserInfo } from 'services/user'
+import { login, register, getUserByToken, getUserList, modifyUserInfo } from 'services/user'
 
 export default {
   namespace: 'user',
   state: {
     user: {},
+    frontList: [],
     backList: []
   },
   effects: {
@@ -30,8 +31,12 @@ export default {
         return result
       }
     },
-    * getBackUserList(_, { call, put }) {
-      const result = yield call(getBackUserList)
+    * getFrontUserList({ payload: { condition } }, { call, put }) {
+      const result = yield call(getUserList, { ...condition, type: 'front' })
+      yield put({ type: 'setData', payload: { frontList: result } })
+    },
+    * getBackUserList({ payload: { condition } }, { call, put }) {
+      const result = yield call(getUserList, { ...condition, type: 'back' })
       yield put({ type: 'setData', payload: { backList: result } })
     },
     * modifyUserInfo({ payload: { content } }, { call }) {

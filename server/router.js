@@ -11,7 +11,7 @@ router
   .post('/user/login', User.login)
   .get('/user/info', User.getInfoByToken)
   .post('/user/info', User.modifyInfo)
-  .get('/user/back/list', User.getBackList)
+  .get('/user/list', User.getList)
 
 router
   .post('/common/upload', Common.upload)

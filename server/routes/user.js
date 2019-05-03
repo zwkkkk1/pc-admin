@@ -25,8 +25,8 @@ module.exports = {
     const res = await UserModal.update(id, ctx.request.body)
     ctx.body = res
   },
-  getBackList: async (ctx) => {
-    const res = await UserModal.getList('back')
+  getList: async (ctx) => {
+    const res = await UserModal.getList(ctx.query)
     ctx.body = res
   }
 }

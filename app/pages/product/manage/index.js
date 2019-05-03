@@ -7,14 +7,34 @@ import ProductTable from '../component/table'
 import SearchForm from '../component/search'
 
 @connect(mapStateToProps, mapDispatchToProps)
-class Manage extends React.PureComponent {
+class Manage extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      args: {
+        pageSize: 7,
+        pageNo: 1
+      }
+    }
+  }
+
   componentDidMount() {
     setTimeout(() => {
-      const { list, getProductList, user } = this.props
+      const { list, user } = this.props
       if (Object.keys(user).length && !list || !list.length) {
-        getProductList({ uid: user._id })
+        this.setState(({ args }) => ({
+            args: { ...args, uid: user._id }
+          })
+        );
       }
     }, 0)
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.state.args !== nextState.args) {
+      nextProps.getProductList(nextState.args)
+    }
+    return true
   }
 
   componentWillUnmount = async () => {
@@ -22,10 +42,16 @@ class Manage extends React.PureComponent {
   }
 
   handleChange = (id, status) => {
-    const { productEdit, getProductList, user } = this.props
+    const { productEdit, getProductList } = this.props
     productEdit({ status: status ? 0 : 1 }, id).then(() => {
-      getProductList({ uid: user._id })
+      getProductList(this.state.args)
     })
+  }
+
+  handlePageChange = (page) => {
+    this.setState(({ args }) => ({
+      args: { ...args, pageNo: page }
+    }))
   }
 
   handleDelete = (id) => {
@@ -44,8 +70,9 @@ class Manage extends React.PureComponent {
         {level &&
           <ProductTable
             exclude={['uid']}
-            list={list}
+            data={list}
             loading={loading}
+            onPageChange={this.handlePageChange}
             renderAction={(text, { _id, status }) => (
             <span>
               <a href={`/app/product/edit/${_id}`}>编辑</a>

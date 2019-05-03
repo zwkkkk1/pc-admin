@@ -6,6 +6,21 @@ import './style'
 const SubMenu = Menu.SubMenu;
 
 export default class myMenu extends React.Component {
+  constructor(props) {
+    super(props)
+    const { location: { pathname } } = history
+    let openKey = 0
+    props.map.forEach((item, index) => item.children.forEach((child => {
+      if (`/app${child.link}` === pathname) {
+        openKey = index
+      }
+    })))
+    this.state = {
+      defaultSelect: pathname,
+      openKeys: [`sub_${openKey}`]
+    }
+  }
+
   renderItem(item, index) {
     const { handleClickMenu, user: { level: userLevel } } = this.props
     const { icon, name, children, link, level } = item
@@ -33,9 +48,15 @@ export default class myMenu extends React.Component {
 
   render() {
     const { map } = this.props
-    const { location: { pathname } } = history
+    const { defaultSelect, openKeys } = this.state
     return (
-      <Menu theme='dark' mode='inline' defaultOpenKeys={['sub_0']} defaultSelectedKeys={[pathname]}>
+      <Menu
+        theme='dark'
+        mode='inline'
+        onOpenChange={this.onOpenChange}
+        defaultOpenKeys={openKeys}
+        defaultSelectedKeys={[defaultSelect]}
+      >
         {map.map((item, index) => this.renderItem(item, index))}
       </Menu>
     )

@@ -5,7 +5,10 @@ export const login = (user) => (
 )
 
 export const register = (user) => (
-  request.post('/user/register', user)
+  request.post('/user/register', {
+    ...user,
+    avatar: [`http://pq1kytk8k.bkt.clouddn.com/avatar_${Math.floor(Math.random()*100 % 19) + 1}.jpg`]
+  })
 )
 
 export const getUserByToken = () => (
@@ -16,6 +19,8 @@ export const modifyUserInfo = (content) => (
   request.post('/user/info', content)
 )
 
-export const getBackUserList = () => (
-  request.get('/user/back/list')
+export const getUserList = (condition) => (
+  request.get('/user/list', {
+    params: condition
+  })
 )
