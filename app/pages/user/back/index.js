@@ -34,9 +34,13 @@ class Back extends React.Component {
   }
 
   render() {
-    const { backList, loading } = this.props
+    const { backList: { data, num }, loading } = this.props
     return (
-      <UserTable list={backList} loading={loading} onPageChange={this.handlePageChange} />
+      <UserTable
+        list={data}
+        loading={loading}
+        pagination={{ pageSize: this.state.args.pageSize, onChange: this.handlePageChange, total: num }}
+      />
     )
   }
 }

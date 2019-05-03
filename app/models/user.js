@@ -1,11 +1,16 @@
 import { login, register, getUserByToken, getUserList, modifyUserInfo } from 'services/user'
 
+const initList = {
+  data: [],
+  num: 0
+}
+
 export default {
   namespace: 'user',
   state: {
     user: {},
-    frontList: [],
-    backList: []
+    frontList: initList,
+    backList: initList
   },
   effects: {
     * login({ payload: { user } }, { call }) {

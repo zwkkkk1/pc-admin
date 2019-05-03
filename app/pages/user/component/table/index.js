@@ -37,13 +37,13 @@ export default class userTable extends React.PureComponent {
   }
 
   render() {
-    const { list: { data, num }, loading, onPageChange } = this.props
+    const { list, loading, pagination } = this.props
     return (
       <Table
         className='list'
-        dataSource={data}
-        pagination={{ pageSize: 7, onChange: onPageChange, total: num }}
+        dataSource={list}
         loading={loading}
+        pagination={pagination}
         columns={this.state.columns}
         bordered
       />

@@ -34,9 +34,13 @@ class Front extends React.Component {
   }
 
   render() {
-    const { frontList, loading } = this.props
+    const { frontList: { data, num }, loading } = this.props
     return (
-      <UserTable list={frontList} loading={loading} onPageChange={this.handlePageChange} />
+      <UserTable
+        list={data}
+        loading={loading}
+        pagination={{ pageSize: this.state.args.pageSize, onChange: this.handlePageChange, total: num }}
+      />
     )
   }
 }

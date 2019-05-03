@@ -62,7 +62,7 @@ class Manage extends React.Component {
   }
 
   render() {
-    const { list, loading, user: { level } } = this.props
+    const { list: { data, num }, loading, user: { level } } = this.props
     return (
       <div>
         <Button type='primary' href='/app/product/add'>发布商品</Button>
@@ -70,9 +70,9 @@ class Manage extends React.Component {
         {level &&
           <ProductTable
             exclude={['uid']}
-            data={list}
+            data={data}
             loading={loading}
-            onPageChange={this.handlePageChange}
+            pagination={{ pageSize: this.state.args.pageSize, onChange: this.handlePageChange, total: num }}
             renderAction={(text, { _id, status }) => (
             <span>
               <a href={`/app/product/edit/${_id}`}>编辑</a>

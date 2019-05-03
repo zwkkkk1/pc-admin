@@ -48,12 +48,12 @@ export default class productTable extends React.PureComponent {
   }
 
   render() {
-    const { data: { data, num }, loading, onPageChange } = this.props
+    const { data, loading, pagination } = this.props
     return (
       <Table
         className='product-list'
         dataSource={data}
-        pagination={{ pageSize: 1, onChange: onPageChange, total: num }}
+        pagination={pagination}
         loading={loading}
         columns={this.state.columns}
         bordered
@@ -63,6 +63,10 @@ export default class productTable extends React.PureComponent {
 }
 
 productTable.defaultProps = {
+  data: {
+    data: {},
+    num: 0
+  },
   exclude: [],
   renderAction: null
 }

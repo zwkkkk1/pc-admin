@@ -1,9 +1,14 @@
 import { add, edit, productDel, getList, productGet } from '../services/product'
 
+const initList = {
+  data: [],
+  num: 0
+}
+
 export default {
   namespace: 'product',
   state: {
-    list: [],
+    list: initList,
     itemMap: {}
   },
   effects: {
@@ -30,7 +35,7 @@ export default {
       yield put({ type: 'setData', payload: { itemMap } })
     },
     * clearList(_, { put }) {
-      yield put({ type: 'setData', payload: { list: []} })
+      yield put({ type: 'setData', payload: { list: initList } })
     }
   },
   reducers: {
