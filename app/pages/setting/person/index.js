@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'dva'
-import { Form, Button, Message, Input, Tooltip, Icon, Radio } from 'antd'
+import { Form, Button, Message, Input, Icon, Radio } from 'antd'
 import { PictureWall } from 'components'
 import { history } from 'utils'
 import { mapStateToProps, mapDispatchToProps } from './connect'
@@ -14,9 +14,11 @@ const userTypeEnum = {
 @connect(mapStateToProps, mapDispatchToProps)
 class Person extends React.PureComponent {
   componentDidMount() {
-    const { user, getLoginUserInfo } = this.props
+    const { user, getLoginUserInfo, form: { setFieldsValue } } = this.props
     if (Object.keys(user).length === 0) {
       getLoginUserInfo()
+    } else {
+      setFieldsValue(user)
     }
   }
 
@@ -32,7 +34,6 @@ class Person extends React.PureComponent {
     e.preventDefault()
     const { form: { validateFieldsAndScroll }, modifyUserInfo } = this.props
     validateFieldsAndScroll(async (err, values) => {
-      console.log('submit >>> ', values)
       if (!err) {
         const result = await modifyUserInfo(values)
         if (result) {

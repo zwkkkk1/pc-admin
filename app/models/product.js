@@ -26,7 +26,7 @@ export default {
     },
     * getList({ payload: { condition } }, { call, put }) {
       const list = yield call(getList, condition)
-      yield put({ type: 'setData', payload: { list } })
+      return yield put({ type: 'setData', payload: { list } })
     },
     * productGet({ payload: { id } }, { call, put, select }) {
       const itemMap = yield select(state => state.product.itemMap)

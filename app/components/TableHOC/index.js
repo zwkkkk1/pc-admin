@@ -31,7 +31,7 @@ export default (WrappedComponent) => (
 
     getList = async (args) => {
       const { getList } = this.props
-      getList({ ...this.state.args, ...args })
+      return getList({ ...this.state.args, ...args })
     }
 
     changeArgs = (params) => {

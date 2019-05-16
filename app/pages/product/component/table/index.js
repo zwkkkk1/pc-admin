@@ -1,8 +1,8 @@
 import React from 'react'
 import { connect } from 'dva'
-import { Table } from 'antd'
+import { Table, Tooltip, Icon } from 'antd'
 import { TableHOC } from 'components'
-import { formatPrice } from 'utils'
+import { formatPrice, formatStatus } from 'utils'
 import { mapStateToProps, mapDispatchToProps, mergeProps } from './connect'
 
 import './style'
@@ -40,6 +40,20 @@ class productTable extends React.PureComponent {
         dataIndex: 'uid',
         key: 'uid',
         render: ({ nickname, username }) => <span>{nickname || username}</span>
+      }, {
+        title: '状态',
+        dataIndex: 'status',
+        key: 'status',
+        render: (status, { extra }) => (
+          <span>
+            <span style={{ marginRight: 4 }}>{formatStatus(status)}</span>
+            {Number(status) === -2 && (
+              <Tooltip title={extra}>
+                <Icon type='question-circle-o' />
+              </Tooltip>
+            )}
+          </span>
+        )
       }, {
         title: '操作',
         key: 'action',

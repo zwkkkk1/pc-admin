@@ -1,0 +1,21 @@
+.modal-line {
+  margin-bottom: 4px;
+  display: flex;
+
+  .modal-title {
+    margin-right: 15px;
+  }
+
+  .modal-content {
+    flex: 1;
+  }
+  
+  .product-image {
+    width: 104px;
+    height: 104px;
+    margin-right: 8px;
+    padding: 8px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+  }
+}

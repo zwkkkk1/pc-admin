@@ -14,9 +14,7 @@ class ProductForm extends React.PureComponent {
   componentDidMount() {
     const { item, form: { setFieldsValue }, getCategoryList } = this.props
     getCategoryList({ level: 1 })
-    if (item) {
-      setFieldsValue(item)
-    }
+    setFieldsValue(item)
   }
 
   handleSubmit = (e) => {
@@ -26,7 +24,7 @@ class ProductForm extends React.PureComponent {
       if (!err) {
         const result = await handleSubmit(values)
         if(result) (
-          Message.success('编辑成功', 1).then(() => history.replace('/app/product/manage'))
+          Message.success('上传成功', 1).then(() => history.replace('/app/product/manage'))
         )
       } else {
         Message.warning(err[Object.keys(err)[0]].errors[0].message, 1)
@@ -66,7 +64,7 @@ class ProductForm extends React.PureComponent {
           label={(
             <span>
               商品图片&nbsp;
-              <Tooltip title='请上传小于4MB的PNG或JPG图片'>
+              <Tooltip title='请上传小于2MB的PNG或JPG图片'>
                 <Icon type='question-circle-o' />
               </Tooltip>
             </span>
@@ -101,7 +99,7 @@ class ProductForm extends React.PureComponent {
           label={(
             <span>
               图文详情&nbsp;
-              <Tooltip title='请上传小于4MB的PNG或JPG图片'>
+              <Tooltip title='请上传小于2MB的PNG或JPG图片'>
                 <Icon type='question-circle-o' />
               </Tooltip>
             </span>

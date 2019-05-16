@@ -34,11 +34,14 @@ class DocumentLayout extends React.PureComponent {
   }
 
   render() {
-    const { user: { username, avatar, nickname }, breadCrumb: map, user } = this.props
+    const { user: { username, avatar, nickname }, breadCrumb: map, user, history } = this.props
     const dropMenu = (
       <Menu>
         <Menu.Item>
-          <a href='/app/setting/person'>个人设置</a>
+          <a onClick={() => history.push('/app/setting/person')}>个人设置</a>
+        </Menu.Item>
+        <Menu.Item>
+          <a onClick={() => history.push('/app/setting/collect')}>我的收藏</a>
         </Menu.Item>
         <Menu.Item>
           <a onClick={this.handleLogout.bind(this)}>退出</a>

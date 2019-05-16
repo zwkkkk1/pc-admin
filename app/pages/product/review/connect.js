@@ -4,4 +4,5 @@ export const mapStateToProps = (state) => {
 }
 
 export const mapDispatchToProps = (dispatch) => ({
+  productEdit: (content, id) => dispatch({ type: 'product/edit', payload: { content, id } })
 })

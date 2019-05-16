@@ -52,6 +52,7 @@ class Application extends React.Component {
               path={key}
               render={props => (
                   <DocumentLayout
+                    {...props}
                     breadCrumb={breadCrumb}
                     user={user}
                   >

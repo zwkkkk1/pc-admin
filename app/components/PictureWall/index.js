@@ -1,7 +1,7 @@
 import React from 'react'
 import { Icon, Progress } from 'antd';
 import { Upload } from 'components'
-import { upload } from 'utils'
+import { uploadOSS } from 'utils'
 
 class PicturesWall extends React.Component {
   constructor(props) {
@@ -41,7 +41,7 @@ class PicturesWall extends React.Component {
       status: 'uploading'
     }]
     setFieldsValue({ [field]: [].concat(fileList) })
-    upload.send(config)
+    uploadOSS.send(config, { prefix: 'product' })
   }
 
   handleProgress = ({ percent }) => {
@@ -60,8 +60,8 @@ class PicturesWall extends React.Component {
     this.setState({ fileList: [...fileList]})
     setFieldsValue({ [field]: fileList.map((file) => {
         try{
-          const { url, response: { data } } = file
-          return url ? url : `http://pq1kytk8k.bkt.clouddn.com/${data.key}`
+          const { url, response } = file
+          return url ? url : response.url
         } catch(err) {
           console.log(err)
         }
@@ -75,7 +75,7 @@ class PicturesWall extends React.Component {
     const uploadButton = (
       <div>
         <Icon type='plus' />
-        <div className='ant-upload-text'>Upload</div>
+        <div className='ant-upload-text'>上传</div>
       </div>
     );
     return (

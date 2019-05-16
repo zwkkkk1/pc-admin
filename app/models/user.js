@@ -1,4 +1,4 @@
-import { login, register, getUserByToken, getUserList, modifyUserInfo } from 'services/user'
+import { login, register, getUserByToken, getUserList, modifyUserInfo, getCollection, addCollect, delCollect } from 'services/user'
 
 const initList = {
   data: [],
@@ -9,6 +9,10 @@ export default {
   namespace: 'user',
   state: {
     user: {},
+    collection: {
+      data: {},
+      num: 0
+    },
     list: initList
   },
   effects: {
@@ -40,11 +44,33 @@ export default {
       yield put({ type: 'setData', payload: { list: result } })
     },
     * modifyUserInfo({ payload: { content } }, { call }) {
-      const result = yield call(modifyUserInfo, content)
-      return result
+      return yield call(modifyUserInfo, content)
     },
     * clearList(_, { put }) {
-      yield put({ type: 'setData', payload: { list: initList } })
+      return yield put({ type: 'setData', payload: { list: initList } })
+    },
+    // 获取用户收藏列表
+    * getCollection(_, { call, put }) {
+      const { num, data } = yield call(getCollection)
+      let dataMap = {}
+      data.forEach(({ pid, ...restParams }) => dataMap[pid] = restParams)
+      return yield put({ type: 'setData', payload: { collection: { num, data: dataMap } } })
+    },
+    * addCollect({ payload: { product } }, { call }) {
+      const { uid: { nickname, username }, name, mainImages, images, category, price, _id } = product
+      const params = {
+        username: nickname || username,
+        name,
+        price,
+        pid: _id,
+        mainImage: [mainImages[0] || images[0]],
+        category: category.map(item => item.name)
+      }
+
+      return yield call(addCollect, params)
+    },
+    * delCollect({ payload: { pid } }, { call }) {
+      return yield call(delCollect, pid)
     }
   },
   reducers: {

@@ -14,10 +14,11 @@ const productSchema = new Schema({
   uid: String,
   desc: String,
   category: Array,
-  status: { type: Number, default: 1 }, // 0 下架，1 正常，-1 待审核
+  status: { type: Number, default: -1 }, // 0 下架，1 正常，-1 待审核 -2 审核失败
   price: Number,
   mainImages: Array,
-  images: Array
+  images: Array,
+  extra: { type: String, default: '' } //存储一些额外信息，如审核失败信息
 }, {
   timestamps: true
 })

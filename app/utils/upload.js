@@ -9,8 +9,8 @@ const getYMD = (prefix) => {
   return prefix ? `${prefix}_${year}${month}${day}` : `${year}${month}${day}`
 }
 
-// upload 至七牛云
 class upload {
+  // 上传至七牛云
   send(config, options = {}) {
     const { action, filename, file, onSuccess, onProgress } = config
     const { prefix } = options

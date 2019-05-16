@@ -12,6 +12,7 @@ import FrontUser from './user/front'
 import BackUser from './user/back'
 import UserAdd from './user/add'
 import PersonSetting from './setting/person'
+import PersonCollect from './setting/collect'
 
 export default {
   App,
@@ -27,5 +28,6 @@ export default {
   BackUser,
   NotFound,
   UserAdd,
-  PersonSetting
+  PersonSetting,
+  PersonCollect
 }

@@ -24,3 +24,17 @@ export const getUserList = (condition) => (
     params: condition
   })
 )
+
+export const getCollection = () => (
+  request.get('/collect')
+)
+
+export const addCollect = (product) => (
+  request.post('/collect', product)
+)
+
+export const delCollect = (pid) => (
+  request.delete('/collect', {
+    params: { pid }
+  })
+)

@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'dva'
 import { mapStateToProps, mapDispatchToProps } from './connect'
-import ProductForm from '../component/form'
+import { ProductForm } from '../'
 
 @connect(mapStateToProps, mapDispatchToProps)
 class ProductAdd extends React.PureComponent {

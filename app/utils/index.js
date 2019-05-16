@@ -6,7 +6,11 @@ export { default as history } from './history'
 
 export { default as upload } from './upload'
 
+export { default as uploadOSS } from './uploadOSS'
+
 export { default as config } from './config'
+
+export * from './lib'
 
 export * from './format'
 
@@ -37,7 +41,8 @@ export const routeConfig = {
     { alias: '/user/back', component: 'BackUser' },
     { alias: '/user/add', component: 'UserAdd', breadCrumb: '用户中心/用户注册' },
     { alias: '/category', component: 'Category' },
-    { alias: '/setting/person', component: 'PersonSetting', breadCrumb: '设置/个人设置' }
+    { alias: '/setting/person', component: 'PersonSetting', breadCrumb: '设置/个人设置' },
+    { alias: '/setting/collect', component: 'PersonCollect', breadCrumb: '设置/我的收藏' }
   ],
   others: [
     { alias: '/login', component: 'Login' }

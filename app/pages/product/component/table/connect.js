@@ -1,7 +1,7 @@
-export const mapStateToProps = (state) => {
+export const mapStateToProps = (state, ownProps) => {
   const { product: { list }, loading } = state
   return {
-    list,
+    list: ownProps.list || list,
     loading: !!loading.effects['product/getList']
   }
 }

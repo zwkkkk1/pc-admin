@@ -1,4 +1,16 @@
 export default {
+  aliyunConfig: {
+    region: 'oss-cn-hangzhou.aliyuncs.com',
+    AccessKeyID: 'LTAIEaHJUkAHsdQU',
+    AccessKeySecret: 'Og6qJsGkOP9BmJHiI01knT0f4QBUaZ',
+    bucket: 'graduation-product',
+    policyText: {
+      'expiration': '2020-01-01T12:00:00.000Z', // 设置该Policy的失效时间，超过这个失效时间之后，就没有办法通过这个policy上传文件了
+      'conditions': [
+        ['content-length-range', 0, 1048576000] // 设置上传文件的大小限制,如果超过了这个大小，文件上传到OSS会报错的
+      ]
+    }
+  },
   solgan: [
     '最好的人，像孩子一样，真诚。像夕阳一样，温暖。像天空一样，宁静',
     '生活不能等别人来安排，要自已去争取和奋斗；而不论其结果是喜是悲，但可以慰藉的是，你总不枉在这世界上活了一场',
