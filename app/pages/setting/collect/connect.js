@@ -6,5 +6,6 @@ export const mapStateToProps = (state) => {
 }
 
 export const mapDispatchToProps = (dispatch) => ({
-  getCollection: () => dispatch({ type: 'user/getCollection' })
+  getCollection: () => dispatch({ type: 'user/getCollection' }),
+  delCollect: (pid) => dispatch({ type: 'user/delCollect', payload: { pid } })
 })

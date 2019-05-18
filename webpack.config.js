@@ -54,6 +54,7 @@ module.exports = {
     contentBase: path.join(__dirname, './dist'),
     historyApiFallback: true,
     host: '0.0.0.0',
+    hot: false,
     proxy: {
       '/api': {
         target: `${url}:${port}`,

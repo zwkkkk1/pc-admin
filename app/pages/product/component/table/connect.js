@@ -1,14 +1,19 @@
-export const mapStateToProps = (state, ownProps) => {
-  const { product: { list }, loading } = state
+export const mapStateToProps = (state) => {
+  const { product: { list }, loading, user: { collectionMap } } = state
   return {
-    list: ownProps.list || list,
+    list,
+    collectionMap,
     loading: !!loading.effects['product/getList']
   }
 }
 
 export const mapDispatchToProps = (dispatch) => ({
   getList: (condition) => dispatch({ type: 'product/getList', payload: { condition } }),
-  clearList: () => dispatch({ type: 'product/clearList' })
+  productEdit: (content, id) => dispatch({ type: 'product/edit', payload: { content, id } }),
+  clearList: () => dispatch({ type: 'product/clearList' }),
+  getCollection: () => dispatch({ type: 'user/getCollection' }),
+  addCollect: (product) => dispatch({ type: 'user/addCollect', payload: { product } }),
+  delCollect: (pid) => dispatch({ type: 'user/delCollect', payload: { pid } })
 })
 
 export const mergeProps = (stateProps, dispatchProps, ownProps) => ({

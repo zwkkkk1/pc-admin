@@ -9,8 +9,12 @@ export default {
   namespace: 'user',
   state: {
     user: {},
-    collection: {
+    collectionMap: {
       data: {},
+      num: 0
+    },
+    collection: {
+      data: [],
       num: 0
     },
     list: initList
@@ -51,10 +55,11 @@ export default {
     },
     // 获取用户收藏列表
     * getCollection(_, { call, put }) {
-      const { num, data } = yield call(getCollection)
+      const collection = yield call(getCollection)
+      const { num, data } = collection
       let dataMap = {}
       data.forEach(({ pid, ...restParams }) => dataMap[pid] = restParams)
-      return yield put({ type: 'setData', payload: { collection: { num, data: dataMap } } })
+      return yield put({ type: 'setData', payload: { collection, collectionMap: { num, data: dataMap } } })
     },
     * addCollect({ payload: { product } }, { call }) {
       const { uid: { nickname, username }, name, mainImages, images, category, price, _id } = product
@@ -63,7 +68,7 @@ export default {
         name,
         price,
         pid: _id,
-        mainImage: [mainImages[0] || images[0]],
+        mainImages: [mainImages[0] || images[0]],
         category: category.map(item => item.name)
       }
 

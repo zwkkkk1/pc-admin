@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'dva'
 import { Divider, Modal, Message, Input } from 'antd'
-import { ProductModal } from 'components'
 import { mapStateToProps, mapDispatchToProps } from './connect'
 import { ProductTable } from '../'
 
@@ -14,7 +13,6 @@ const { TextArea } = Input
 class Review extends React.Component {
   state = {
     item: null,  // 暂存数据
-    productVisible: false,
     reviewFailVisible: false
   }
 
@@ -34,7 +32,7 @@ class Review extends React.Component {
   }
 
   render() {
-    const { productVisible, item, reviewFailVisible } = this.state
+    const { reviewFailVisible } = this.state
     const { productEdit } = this.props
     return (
       <div>
@@ -42,10 +40,8 @@ class Review extends React.Component {
           ref={(node) => this.tableRef = node}
           args={{ status: -1 }}
           exclude={['status']}
-          renderAction={(text, record) => (
+          renderAction={['view', (text, record) => (
             <span>
-              <a onClick={this.toggleVisible('productVisible', record)}>查看</a>
-              <Divider type='vertical' />
               <a onClick={() => (
                 confirm({
                   title: '商品审核',
@@ -60,9 +56,8 @@ class Review extends React.Component {
               <Divider type='vertical' />
               <a onClick={this.toggleVisible('reviewFailVisible', record)}>审核失败</a>
             </span>
-          )}
+          )]}
         />
-        {item && <ProductModal visible={productVisible} handleOk={this.toggleVisible('productVisible')} item={item} />}
         <Modal
           title='审核失败原因'
           visible={reviewFailVisible}

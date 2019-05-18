@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'dva'
-import { Table, Tooltip, Icon } from 'antd'
-import { TableHOC } from 'components'
+import { Table, Tooltip, Icon, Divider } from 'antd'
+import { TableHOC, ProductModal } from 'components'
 import { formatPrice, formatStatus } from 'utils'
 import { mapStateToProps, mapDispatchToProps, mergeProps } from './connect'
 
@@ -10,8 +10,10 @@ import './style'
 class productTable extends React.PureComponent {
   constructor(props) {
     super(props)
-    const { exclude, renderAction } = props
+    const { exclude } = props
     this.state = {
+      productVisible: false,
+      item: null,
       columns: [{
         title: '编号',
         key: 'index',
@@ -24,7 +26,7 @@ class productTable extends React.PureComponent {
         title: '商品类目',
         dataIndex: 'category',
         key: 'category',
-        render: (category) => <span>{category.map(item => item.name).join(' / ')}</span>
+        render: (category) => <span>{category.map(item => item.name || item).join(' / ')}</span>
       }, {
         title: '价格',
         dataIndex: 'price',
@@ -34,12 +36,12 @@ class productTable extends React.PureComponent {
         title: '预览图',
         dataIndex: 'mainImages',
         key: 'mainImages',
-        render: (mainImages, record) => <img className='item-image' src={mainImages[0] || record.images[0]} />
+        render: (mainImages, { images }) => <img className='item-image' src={mainImages[0] || images || images[0] || ''} />
       }, {
         title: '发布者',
         dataIndex: 'uid',
         key: 'uid',
-        render: ({ nickname, username }) => <span>{nickname || username}</span>
+        render: ({ nickname, username }, { username: name }) => <span>{nickname || username || name}</span>
       }, {
         title: '状态',
         dataIndex: 'status',
@@ -57,9 +59,7 @@ class productTable extends React.PureComponent {
       }, {
         title: '操作',
         key: 'action',
-        render: typeof renderAction !== 'function' ? (text, { _id }) => (
-          <a href={`/app/product/edit/${_id}`}>编辑</a>
-        ) : (...props) => renderAction(...props)
+        render: (...props) => this.renderAction(...props)
       }].filter(col => exclude.indexOf(col.key) === -1)
     }
   }
@@ -68,17 +68,67 @@ class productTable extends React.PureComponent {
     await this.props.clearList()
   }
 
+  toggleVisible = (key, item = null) => () => {
+    this.setState(prevState => ({
+      item,
+      [key]: !prevState[key]
+    }))
+  }
+
+  handleChange = (id, status) => {
+    const { productEdit, getList } = this.props
+    productEdit({ status: status ? 0 : 1 }, id).then(() => getList())
+  }
+
+  // 渲染操作列
+  renderAction = (text, record) => {
+    const { renderAction, collectionMap, addCollect, delCollect, getCollection } = this.props
+    const { _id, status } = record
+    const actionMap = {
+      edit: (<a href={`/app/product/edit/${_id}`}>编辑</a>),
+      view: (<a onClick={this.toggleVisible('productVisible', record)}>查看</a>),
+      obtain: (<a onClick={() => this.handleChange(_id, status)}>{status ? '下架' : '上架'}</a>),
+      collect: (
+        Object.keys(collectionMap.data).indexOf(record._id) !== -1 ? (
+          <a onClick={() => delCollect(record._id).then(() => getCollection())}>取消收藏</a>
+        ) : (
+          <a onClick={() => addCollect(record).then(() => getCollection())}>收藏</a>
+        )
+      )
+    }
+    if (typeof renderAction === 'function') {
+      return renderAction(text, record)
+    } else if (renderAction instanceof Array) {
+      return (
+        renderAction.map((action, index, array) => (
+          <span key={index}>
+            {typeof action === 'function' ? action(text, record) : (
+              Object.keys(actionMap).indexOf(action) !== -1 ? actionMap[action] : <span>{action}</span>
+            )}
+            {index < array.length -1 && <Divider type='vertical' />}
+          </span>
+        ))
+      )
+    } else {
+      return actionMap.edit
+    }
+  }
+
   render() {
     const { list: { data, num }, loading, onPageChange, args } = this.props
+    const { item, productVisible, columns } = this.state
     return (
-      <Table
-        className='product-list'
-        dataSource={data}
-        loading={loading}
-        columns={this.state.columns}
-        pagination={{ pageSize: args.pageSize, onChange: onPageChange, total: num }}
-        bordered
-      />
+      <div>
+        <Table
+          className='product-list'
+          dataSource={data}
+          loading={loading}
+          columns={columns}
+          pagination={{ pageSize: args.pageSize, onChange: onPageChange, total: num }}
+          bordered
+        />
+        {item && <ProductModal visible={productVisible} handleOk={this.toggleVisible('productVisible')} item={item} />}
+      </div>
     )
   }
 }
