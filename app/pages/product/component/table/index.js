@@ -1,8 +1,8 @@
 import React from 'react'
 import { connect } from 'dva'
-import { Table, Tooltip, Icon, Divider } from 'antd'
+import { Table, Tooltip, Icon } from 'antd'
 import { TableHOC, ProductModal } from 'components'
-import { formatPrice, formatStatus } from 'utils'
+import { formatPrice, enumPreset } from 'utils'
 import { mapStateToProps, mapDispatchToProps, mergeProps } from './connect'
 
 import './style'
@@ -48,7 +48,7 @@ class productTable extends React.PureComponent {
         key: 'status',
         render: (status, { extra }) => (
           <span>
-            <span style={{ marginRight: 4 }}>{formatStatus(status)}</span>
+            <span style={{ marginRight: 4 }}>{enumPreset.productStatus[status]}</span>
             {Number(status) === -2 && (
               <Tooltip title={extra}>
                 <Icon type='question-circle-o' />
@@ -76,8 +76,8 @@ class productTable extends React.PureComponent {
   }
 
   handleChange = (id, status) => {
-    const { productEdit, getList } = this.props
-    productEdit({ status: status ? 0 : 1 }, id).then(() => getList())
+    const { productEdit, getList, args } = this.props
+    productEdit({ status: status ? 0 : 1 }, id).then(() => getList(args))
   }
 
   // 渲染操作列
@@ -96,22 +96,7 @@ class productTable extends React.PureComponent {
         )
       )
     }
-    if (typeof renderAction === 'function') {
-      return renderAction(text, record)
-    } else if (renderAction instanceof Array) {
-      return (
-        renderAction.map((action, index, array) => (
-          <span key={index}>
-            {typeof action === 'function' ? action(text, record) : (
-              Object.keys(actionMap).indexOf(action) !== -1 ? actionMap[action] : <span>{action}</span>
-            )}
-            {index < array.length -1 && <Divider type='vertical' />}
-          </span>
-        ))
-      )
-    } else {
-      return actionMap.edit
-    }
+    return renderAction(actionMap)(text, record)
   }
 
   render() {

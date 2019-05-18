@@ -10,6 +10,7 @@ const router = new Router()
 router
   .post('/user/register', User.register)
   .post('/user/login', User.login)
+  .post('/user/:id', User.edit)
   .get('/user/info', User.getInfoByToken)
   .post('/user/info', User.modifyInfo)
   .get('/user/list', User.getList)
@@ -17,6 +18,7 @@ router
 router
   .post('/common/upload', Common.upload)
   .post('/common/qiniuToken', Common.getQiniuToken)
+  .get('/common/count', Common.getCount)
 
 router
   .post('/product/add', Product.add)

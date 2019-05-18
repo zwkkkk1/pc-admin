@@ -10,6 +10,8 @@ export { default as uploadOSS } from './uploadOSS'
 
 export { default as config } from './config'
 
+export { default as enumPreset } from './enum'
+
 export * from './lib'
 
 export * from './format'

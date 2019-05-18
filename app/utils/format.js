@@ -9,17 +9,6 @@ export const formatPath = (path) => {
 
 export const formatPrice = price => `${Math.floor(price / 100)}.${price % 100}`
 
-const statusEnum = {
-  '-2': '审核失败' ,
-  '-1': '待审核',
-  '0': '已下架',
-  '1': '已上架'
-}
-
-export const formatStatus = (status) => {
-  return statusEnum[status]
-}
-
 export const formatDate = (date, type = 'Y-M-D h:m:s') => {
   let timestamp = parseInt(new Date(date).getTime(), 10)
   let myDate

@@ -68,6 +68,9 @@ productSchema.statics = {
       data: list,
       num: await ProductModel.count(restParams)
     }
+  },
+  getCount: async (condition) => {
+    return await ProductModel.count(condition)
   }
 }
 

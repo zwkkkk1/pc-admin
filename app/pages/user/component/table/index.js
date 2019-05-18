@@ -1,7 +1,7 @@
 import React from 'react'
 import { Table } from 'antd'
 import { connect } from 'dva'
-import { formatDate } from 'utils'
+import { formatDate, enumPreset } from 'utils'
 import { TableHOC } from 'components'
 import { mapStateToProps, mapDispatchToProps, mergeProps } from './connect'
 
@@ -10,7 +10,7 @@ import './style'
 class userTable extends React.PureComponent {
   constructor(props) {
     super(props)
-    const { exclude, renderAction } = props
+    const { exclude } = props
     this.state = {
       columns: [{
         title: '编号',
@@ -28,19 +28,33 @@ class userTable extends React.PureComponent {
       }, {
         title: '状态',
         dataIndex: 'status',
-        key: 'status'
+        key: 'status',
+        render: (status) => <span>{enumPreset.userStatus[status]}</span>
       }, {
         title: '操作',
         key: 'action',
-        render: () => (
-          <a>冻结</a>
-        )
+        render: (...props) => this.renderAction(...props)
       }].filter(col => exclude.indexOf(col.key) === -1)
     }
   }
 
   componentWillUnmount = async () => {
     await this.props.clearList()
+  }
+
+  handleFreeze = (status, id) => () => {
+    const { userEdit, getList, args } = this.props
+    userEdit({ status: status ? 0 : 1 }, id).then(() => getList(args))
+  }
+
+  // 渲染操作列
+  renderAction = (text, record) => {
+    const { renderAction } = this.props
+    const { status, _id } = record
+    const actionMap = {
+      freeze: (<a onClick={this.handleFreeze(status, _id)}>{status ? '冻结' : '取消冻结'}</a>)
+    }
+    return renderAction(actionMap)(text, record)
   }
 
   render() {

@@ -30,7 +30,7 @@ class Login extends React.PureComponent {
     if (result) {
       message
         .info(`${type === 'login' ? '登录' : '注册'}成功`, 1)
-        .then(() => replace('/app/product/manage'))
+        .then(() => replace('/app'))
     }
   }
 

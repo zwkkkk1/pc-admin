@@ -8,6 +8,7 @@ export const mapStateToProps = (state) => {
 
 export const mapDispatchToProps = (dispatch) => ({
   getList: (condition) => dispatch({ type: 'user/getUserList', payload: { condition } }),
+  userEdit: (content, id) => dispatch({ type: 'user/edit', payload: { content, id } }),
   clearList: () => dispatch({ type: 'user/clearList' })
 })
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Button, Modal, Divider, Message, Popconfirm } from 'antd'
+import { Table, Button, Modal, Divider, Popconfirm } from 'antd'
 import { connect } from 'dva'
 import { formatDate } from 'utils'
 import { mapStateToProps, mapDispatchToProps } from './connect'

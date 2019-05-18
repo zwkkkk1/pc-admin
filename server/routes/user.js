@@ -12,16 +12,21 @@ module.exports = {
     const res = await UserModel.login(content)
     ctx.body = res
   },
+  edit: async (ctx) => {
+    const content = ctx.request.body
+    await UserModel.edit(ctx.params.id, content)
+    ctx.status = 200
+  },
   getInfoByToken: async (ctx) => {
     const token = ctx.request.headers.authorization
-    const id = new Jwt(token).verifyToken();
+    const { id } = new Jwt(token).verifyToken();
     const res = await UserModel.get(id)
     await UserModel.update(id, { loginAt: Date.now() })
     ctx.body = res
   },
   modifyInfo: async (ctx) => {
     const token = ctx.request.headers.authorization
-    const id = new Jwt(token).verifyToken();
+    const { id } = new Jwt(token).verifyToken();
     const res = await UserModel.update(id, ctx.request.body)
     ctx.body = res
   },

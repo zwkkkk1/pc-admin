@@ -1,4 +1,4 @@
-import { login, register, getUserByToken, getUserList, modifyUserInfo, getCollection, addCollect, delCollect } from 'services/user'
+import { login, edit, register, getUserByToken, getUserList, modifyUserInfo, getCollection, addCollect, delCollect, getCount } from 'services/user'
 
 const initList = {
   data: [],
@@ -17,7 +17,8 @@ export default {
       data: [],
       num: 0
     },
-    list: initList
+    list: initList,
+    count: {}
   },
   effects: {
     * login({ payload: { user } }, { call }) {
@@ -25,9 +26,15 @@ export default {
       localStorage.setItem('token', result)
       return result
     },
-    * register({ payload: { user } }, { call }) {
+    * edit({ payload: { content, id } }, { call }) {
+      const result = yield call(edit, content, id)
+      return result
+    },
+    * register({ payload: { user, isLogin = false } }, { call }) {
       const result = yield call(register, user)
-      localStorage.setItem('token', result)
+      if (isLogin) {
+        localStorage.setItem('token', result)
+      }
       return result
     },
     * logout(_, { put }) {
@@ -36,12 +43,14 @@ export default {
     },
     // 通过登录注册获得的 token，获取user信息
     * getLoginUserInfo(_, { call, put }) {
-      const token = localStorage.getItem('token')
-      if (token) {
-        const result = yield call(getUserByToken)
-        yield put({ type: 'setData', payload: { user: result || {} } })
-        return result
-      }
+      const result = yield call(getUserByToken)
+      yield put({ type: 'setData', payload: { user: result || {} } })
+
+      // 用户登录注册时初始化商品、用户数量
+      const count = yield call(getCount)
+      yield put({ type: 'setData', payload: { count } })
+
+      return result
     },
     * getUserList({ payload: { condition } }, { call, put }) {
       const result = yield call(getUserList, condition)

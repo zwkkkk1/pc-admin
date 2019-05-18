@@ -1,14 +1,19 @@
-import { request } from 'utils'
+import { request, config } from 'utils'
 
 export const login = (user) => (
   request.post('/user/login', user)
 )
 
-export const register = (user) => (
-  request.post('/user/register', {
+export const register = (user) => {
+  const { aliyunConfig: { region, bucket } } = config
+  return request.post('/user/register', {
     ...user,
-    avatar: [`http://pq1kytk8k.bkt.clouddn.com/avatar_${Math.floor(Math.random()*100 % 19) + 1}.jpg`]
+    avatar: [`http://${bucket}.${region}/avatar/${Math.floor(Math.random()*100 % 19) + 1}`]
   })
+}
+
+export const edit = (content, id) => (
+  request.post(`/user/${id}`, content)
 )
 
 export const getUserByToken = () => (
@@ -37,4 +42,8 @@ export const delCollect = (pid) => (
   request.delete('/collect', {
     params: { pid }
   })
+)
+
+export const getCount = () => (
+  request.get('/common/count')
 )

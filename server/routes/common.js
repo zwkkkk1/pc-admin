@@ -1,7 +1,10 @@
 const qiniu = require('qiniu')
+const Jwt = require('../utils/token')
 const myError = require('../utils/error')
 const config = require('../utils/config')
 const upload = require('../utils/upload').single('file')
+const UserModel = require('../models/user')
+const ProductModel = require('../models/product')
 
 module.exports = {
   upload: async (ctx, next) => {
@@ -25,6 +28,19 @@ module.exports = {
     } else {
       throw new myError(503, '七牛Token获取失败')
     }
+  },
+  getCount: async (ctx) => {
+    const token = ctx.request.headers.authorization
+    const { level } = new Jwt(token).verifyToken()
+    const result = {}
+    result.product = await ProductModel.getCount()
+    if (level > 1) {
+      result.frontUser = await UserModel.getCount({ type: 'front' })
+    }
+    if (level > 2) {
+      result.backUser = await UserModel.getCount({ type: 'back' })
+    }
+    ctx.body = result
   }
 }
 

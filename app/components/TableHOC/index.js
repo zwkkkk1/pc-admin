@@ -1,4 +1,5 @@
 import React from 'react'
+import { Divider } from 'antd'
 
 export default (WrappedComponent) => (
   class TableHOC extends React.Component {
@@ -44,14 +45,32 @@ export default (WrappedComponent) => (
       }))
     }
 
-    render = () => {
-      return (
+      // 渲染操作列
+    renderAction = (actionMap) => (...props) => {
+      const { renderAction } = this.props
+      if (typeof renderAction === 'function') {
+        return renderAction(...props)
+      } else if (renderAction instanceof Array) {
+        return (
+          renderAction.map((action, index, array) => (
+            <span key={index}>
+              {typeof action === 'function' ? action(...props) : (
+                Object.keys(actionMap).indexOf(action) !== -1 ? actionMap[action] : <span>{action}</span>
+              )}
+              {index < array.length -1 && <Divider type='vertical' />}
+            </span>
+          ))
+        )
+      }
+    }
+
+    render = () => (
       <WrappedComponent
         {...this.props}
         changeArgs={this.changeArgs}
         args={this.state.args}
         onPageChange={this.handlePageChange}
+        renderAction={this.renderAction}
       />)
     }
-  }
 )

@@ -55,6 +55,7 @@ module.exports = {
     historyApiFallback: true,
     host: '0.0.0.0',
     hot: false,
+    inline: false,
     proxy: {
       '/api': {
         target: `${url}:${port}`,
