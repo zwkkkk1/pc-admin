@@ -20,13 +20,13 @@ class Home extends React.PureComponent {
     return (
       <div className='home-wrapper'>
         <Row gutter={16}>
-          {product && <Col span={24 / user.level}>
+          {typeof product !== 'undefined' && <Col span={24 / user.level}>
             <Statistic title='在库商品' value={product} />
           </Col>}
-          {frontUser && <Col span={24 / user.level}>
+          {typeof frontUser !== 'undefined' && <Col span={24 / user.level}>
             <Statistic title='前台用户' value={frontUser} />
           </Col>}
-          {backUser && <Col span={24 / user.level}>
+          {typeof backUser !== 'undefined' && <Col span={24 / user.level}>
             <Statistic title='后台用户' value={backUser} />
           </Col>}
         </Row>

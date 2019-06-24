@@ -16,18 +16,18 @@ class SearchForm extends React.PureComponent {
 
   handleSearch = (e) => {
     e.preventDefault();
-    const { form: { validateFields }, getProductList } = this.props
+    const { form: { validateFields }, getProductList, args } = this.props
     validateFields((err, values) => {
       if (!err) {
-        getProductList(values)
+        getProductList({  ...values, ...args })
       }
     });
   }
 
   handleReset = () => {
-    const { form: { resetFields }, getProductList } = this.props
+    const { form: { resetFields }, getProductList, args } = this.props
     resetFields();
-    getProductList()
+    getProductList(args)
   }
 
   render() {

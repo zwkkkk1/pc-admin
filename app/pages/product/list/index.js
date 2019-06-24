@@ -13,7 +13,7 @@ class List extends React.Component {
   render() {
     return (
       <div>
-        <ProductSearch />
+        <ProductSearch args={{ status: 1 }} />
         <ProductTable
           exclude={['status']}
           ref={this.tableRef}

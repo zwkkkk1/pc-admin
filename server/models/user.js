@@ -14,11 +14,12 @@ const userSchema = new Schema({
   password: String,
   loginAt: { type: Date, default: Date.now },
   status: { type: Number, default: 1 },
-  nickname: String,
+  nickname: { type: String, default: '' },
   avatar: Array,
-  sign: String,
+  sign: { type: String, default: '' },
   sex: { type: Number, default: 1 }, // 1 男 0 女
-  level: { type: Number, default: 1 }  // 1普通用户 2管理员 3超级管理员
+  level: { type: Number, default: 1 },  // 1普通用户 2管理员 3超级管理员
+  contact: { type: Array, default: []}  // 联系方式
 }, {
   autoIndex: true,
   timestamps: true

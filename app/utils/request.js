@@ -18,7 +18,7 @@ const instance = axios.create({
   baseURL: '/api'
 })
 
-instance.interceptors.request.use((config) => {
+instance.interceptors.request.use((config) => { // request前拦截
   // 页面头部加载条
   NProgress.start()
   if (whiteList.indexOf(config.url) === -1) {
@@ -30,7 +30,7 @@ instance.interceptors.request.use((config) => {
   return config
 })
 
-instance.interceptors.response.use(({ data, status }) => {
+instance.interceptors.response.use(({ data, status }) => {  // response前拦截
   NProgress.done();
   if (status === 200) {
     return data

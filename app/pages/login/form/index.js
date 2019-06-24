@@ -42,15 +42,15 @@ class myForm extends React.PureComponent {
           )}
         </Form.Item>
         <Form.Item>
-          {getFieldDecorator('remember', {
+          {/* {getFieldDecorator('remember', {
             valuePropName: 'checked',
             initialValue: true
           })(
             <Checkbox>Remember me</Checkbox>
           )}
-          <a className='login-form-forgot' href=''>Forgot password</a>
+          <a className='login-form-forgot' href=''>Forgot password</a> */}
           <Button type='primary' htmlType='submit' className='login-form-button'>{btnText}</Button>
-          Or <a href=''>register now!</a>
+          {/* Or <a href=''>register now!</a> */}
         </Form.Item>
       </Form>
     );

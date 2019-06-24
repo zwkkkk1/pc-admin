@@ -43,7 +43,14 @@ productSchema.statics = {
     return result
   },
   get: async id => {
-    const product = await ProductModel.findById(id, backMap)
+    const product = await ProductModel.findById(id, backMap).populate([{
+      path: 'category',
+      model: 'Category'
+    }, {
+      path: 'uid',
+      model: 'User',
+      select: userBackMap
+    }])
     if (!product) {
       throw new myError(501, '无效id，商品不存在')
     }

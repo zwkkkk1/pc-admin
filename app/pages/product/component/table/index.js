@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'dva'
 import { Table, Tooltip, Icon } from 'antd'
 import { TableHOC, ProductModal } from 'components'
-import { formatPrice, enumPreset } from 'utils'
+import { formatPrice, enumPreset, history } from 'utils'
 import { mapStateToProps, mapDispatchToProps, mergeProps } from './connect'
 
 import './style'
@@ -85,9 +85,9 @@ class productTable extends React.PureComponent {
     const { renderAction, collectionMap, addCollect, delCollect, getCollection } = this.props
     const { _id, status } = record
     const actionMap = {
-      edit: (<a href={`/app/product/edit/${_id}`}>编辑</a>),
+      edit: (<a onClick={() => history.push(`/app/product/edit/${_id}`)}>编辑</a>),
       view: (<a onClick={this.toggleVisible('productVisible', record)}>查看</a>),
-      obtain: (<a onClick={() => this.handleChange(_id, status)}>{status ? '下架' : '上架'}</a>),
+      obtain: (<a onClick={() => this.handleChange(_id, status)}>{status >= 0 ? (status ? '下架' : '上架') : ''}</a>),
       collect: (
         Object.keys(collectionMap.data).indexOf(record._id) !== -1 ? (
           <a onClick={() => delCollect(record._id).then(() => getCollection())}>取消收藏</a>

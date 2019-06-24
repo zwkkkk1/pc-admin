@@ -70,17 +70,18 @@ export default {
       data.forEach(({ pid, ...restParams }) => dataMap[pid] = restParams)
       return yield put({ type: 'setData', payload: { collection, collectionMap: { num, data: dataMap } } })
     },
-    * addCollect({ payload: { product } }, { call }) {
+    * addCollect({ payload: { product } }, { call, select }) {
+      const { _id: uid } = yield select(state => state.user.user)
       const { uid: { nickname, username }, name, mainImages, images, category, price, _id } = product
       const params = {
         username: nickname || username,
         name,
         price,
         pid: _id,
+        uid,
         mainImages: [mainImages[0] || images[0]],
         category: category.map(item => item.name)
       }
-
       return yield call(addCollect, params)
     },
     * delCollect({ payload: { pid } }, { call }) {

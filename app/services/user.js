@@ -8,7 +8,7 @@ export const register = (user) => {
   const { aliyunConfig: { region, bucket } } = config
   return request.post('/user/register', {
     ...user,
-    avatar: [`http://${bucket}.${region}/avatar/${Math.floor(Math.random()*100 % 19) + 1}`]
+    avatar: [`http://${bucket}.${region}/avatar/${Math.floor(Math.random()*100 % 19) + 1}.jpg`]
   })
 }
 

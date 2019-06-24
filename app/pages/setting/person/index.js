@@ -2,14 +2,8 @@ import React from 'react'
 import { connect } from 'dva'
 import { Form, Button, Message, Input, Icon, Radio } from 'antd'
 import { PictureWall } from 'components'
-import { history } from 'utils'
+import { history, enumPreset } from 'utils'
 import { mapStateToProps, mapDispatchToProps } from './connect'
-
-const userTypeEnum = {
-  1: '普通用户',
-  2: '管理员',
-  3: '超级管理员'
-}
 
 @connect(mapStateToProps, mapDispatchToProps)
 class Person extends React.PureComponent {
@@ -70,7 +64,7 @@ class Person extends React.PureComponent {
           )}
         </Form.Item>
         <Form.Item label='用户类型'>
-          {getFieldDecorator('level')(<p>{userTypeEnum[level]}</p>)}
+          {getFieldDecorator('level')(<p>{enumPreset.userType[level]}</p>)}
         </Form.Item>
         <Form.Item label='头像'>
           {getFieldDecorator('avatar', {

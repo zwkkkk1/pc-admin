@@ -44,7 +44,8 @@ export const routeConfig = {
     { alias: '/user/add', component: 'UserAdd', breadCrumb: '用户中心/用户注册' },
     { alias: '/category', component: 'Category' },
     { alias: '/setting/person', component: 'PersonSetting', breadCrumb: '设置/个人设置' },
-    { alias: '/setting/collect', component: 'PersonCollect', breadCrumb: '设置/我的收藏' }
+    { alias: '/setting/collect', component: 'PersonCollect', breadCrumb: '设置/我的收藏' },
+    { alias: '/setting/contact', component: 'PersonContact', breadCrumb: '设置/联系方式' }
   ],
   others: [
     { alias: '/login', component: 'Login' }

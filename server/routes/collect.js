@@ -19,6 +19,12 @@ module.exports = {
     const { id } = new Jwt(token).verifyToken()
     const res = await CollectModel.delCollect(id, ctx.query.pid)
     ctx.body = res
+  },
+  isProductCollect: async (ctx) => {
+    const token = ctx.request.headers.authorization
+    const { id } = new Jwt(token).verifyToken()
+    const res = await CollectModel.isCollect(id, ctx.params.pid)
+    ctx.body = res
   }
 }
 

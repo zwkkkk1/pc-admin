@@ -23,6 +23,7 @@ router
 router
   .post('/product/add', Product.add)
   .get('/product/list', Product.getList)
+  .get('/product/collect/:pid', Collect.isProductCollect)
   .post('/product/:id', Product.edit)
   .delete('/product/:id', Product.del)
   .get('/product/:id', Product.get)

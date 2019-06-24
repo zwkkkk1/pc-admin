@@ -38,6 +38,10 @@ collectSchema.statics = {
   delCollect: async (uid, pid) => {
     const result = await CollectModel.findOneAndRemove({ uid, pid })
     return result
+  },
+  isCollect: async (uid, pid) => {
+    const result = await CollectModel.find({ uid, pid })
+    return result
   }
 }
 

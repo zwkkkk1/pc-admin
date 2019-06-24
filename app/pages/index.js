@@ -10,9 +10,9 @@ import ProductList from './product/list'
 import ProductReview from './product/review'
 import FrontUser from './user/front'
 import BackUser from './user/back'
-import UserAdd from './user/add'
 import PersonSetting from './setting/person'
 import PersonCollect from './setting/collect'
+import PersonContact from './setting/contact'
 
 export default {
   App,
@@ -27,7 +27,7 @@ export default {
   FrontUser,
   BackUser,
   NotFound,
-  UserAdd,
   PersonSetting,
-  PersonCollect
+  PersonCollect,
+  PersonContact
 }

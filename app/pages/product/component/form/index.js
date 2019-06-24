@@ -12,9 +12,15 @@ const { TextArea } = Input
 @connect(mapStateToProps, mapDispatchToProps)
 class ProductForm extends React.PureComponent {
   componentDidMount() {
-    const { item, form: { setFieldsValue }, getCategoryList } = this.props
+    const { type, getCategoryList } = this.props
     getCategoryList({ level: 1 })
-    setFieldsValue(item)
+    if (type === 'edit') {
+      const { item: { category, ...restParams }, form: { setFieldsValue } } = this.props
+      setFieldsValue({
+        ...restParams,
+        category: category.map(item => item._id)
+      })
+    }
   }
 
   handleSubmit = (e) => {
@@ -42,9 +48,11 @@ class ProductForm extends React.PureComponent {
       >
         <Form.Item label='商品名称'>
           {getFieldDecorator('name', {
-            rules: [{
-              required: true, message: '请输入商品名称'
-            }]
+            rules: [
+              { required: true, message: '请输入商品名称' },
+              { min: 3, message: '请填写3个字符以上' },
+              { max: 50, message: '请不要超过50个字符以上' }
+            ]
           })(<Input />)}
         </Form.Item>
         <Form.Item
@@ -78,7 +86,11 @@ class ProductForm extends React.PureComponent {
           })(<PictureWall needInit={type === 'edit'} field='mainImages' number={3} form={form} />)}
         </Form.Item>
         <Form.Item label='商品描述'>
-          {getFieldDecorator('desc')(<TextArea autosize={{ minRows: 2, maxRows: 6 }} />)}
+          {getFieldDecorator('desc', {
+            rules: [
+              { max: 200, message: '商品描述请小于200个字符' }
+            ]
+          })(<TextArea autosize={{ minRows: 2, maxRows: 6 }} />)}
         </Form.Item>
         <Form.Item
           label={(
@@ -90,9 +102,10 @@ class ProductForm extends React.PureComponent {
           )}
         >
           {getFieldDecorator('price', {
-            rules: [{
-              required: true, message: '请输入商品价格'
-            }]
+            rules: [
+              { required: true, message: '请输入商品价格' },
+              { type: Number, message: '请输入数字类型' }
+            ]
           })(<Input />)}
         </Form.Item>
         <Form.Item

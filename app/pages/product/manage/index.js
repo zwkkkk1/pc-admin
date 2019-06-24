@@ -24,7 +24,7 @@ class Manage extends React.Component {
     return (
       <div>
         <Button type='primary' onClick={() => history.push('/app/product/add')}>发布商品</Button>
-        <ProductSearch />
+        <ProductSearch args={{ uid: _id }} />
         {level &&
           <ProductTable
             ref={this.tableRef}

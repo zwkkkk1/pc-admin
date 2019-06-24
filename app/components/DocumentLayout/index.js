@@ -41,6 +41,9 @@ class DocumentLayout extends React.PureComponent {
           <a onClick={() => history.push('/app/setting/person')}>个人设置</a>
         </Menu.Item>
         <Menu.Item>
+          <a onClick={() => history.push('/app/setting/contact')}>联系方式</a>
+        </Menu.Item>
+        <Menu.Item>
           <a onClick={() => history.push('/app/setting/collect')}>我的收藏</a>
         </Menu.Item>
         <Menu.Item>
