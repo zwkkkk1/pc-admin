@@ -48,7 +48,7 @@ export default {
 
       // 用户登录注册时初始化商品、用户数量
       const count = yield call(getCount)
-      yield put({ type: 'setData', payload: { count } })
+      yield put({ type: 'setData', payload: { count: count || {} } })
 
       return result
     },

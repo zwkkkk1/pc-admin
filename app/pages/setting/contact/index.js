@@ -8,7 +8,6 @@ import { mapStateToProps, mapDispatchToProps } from './connect'
 class Person extends React.PureComponent {
   render() {
     const { user: { contact } } = this.props
-    console.log('contact >>> ', this.props)
     return (
       <div>
         <h4 style={{ marginBottom: '12px' }}>联系方式</h4>

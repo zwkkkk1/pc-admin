@@ -16,7 +16,6 @@ class Home extends React.PureComponent {
   render() {
     const { user, count: { product, frontUser, backUser } } = this.props
     const solgan = renderSolgan()
-    console.log('home render >>>', this.props)
     return (
       <div className='home-wrapper'>
         <Row gutter={16}>

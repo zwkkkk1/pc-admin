@@ -7,7 +7,6 @@ import { mapStateToProps, mapDispatchToProps } from './connect'
 class ContactRow extends React.PureComponent {
   render () {
     const { title, key, user: { contact } } = this.props
-    console.log('contact row >>> ', this.props)
     return (
       <Row style={{ marginBottom: '8px', display: 'flex', alignItems: 'center' }} gutter={16}>
         <Col span={4}>{title}</Col>
