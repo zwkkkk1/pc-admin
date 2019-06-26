@@ -1,7 +1,10 @@
 .DS_Store
 
-#打包目录
+# 打包目录
 dist/
+
+# VSCode配置目录
+.vscode/
 
 # Logs
 logs

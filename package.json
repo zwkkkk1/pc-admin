@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --config webpack.config.js",
-    "server": "nodemon server/app.js"
+    "server": "nodemon server/app.js",
+    "eslint": "eslint ./"
   },
   "author": "",
   "license": "ISC",
@@ -26,6 +27,8 @@
     "dva-loading": "^2.0.6",
     "eslint": "^5.16.0",
     "eslint-plugin-react": "^7.12.4",
+    "html-webpack-plugin": "^3.2.0",
+    "husky": "^2.5.0",
     "node-sass": "^4.11.0",
     "nodemon": "^1.18.11",
     "postcss-loader": "^3.0.0",

@@ -1,8 +1,15 @@
-var path = require('path')
-var { url, port } = require('./utils/config')
+const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { url, port } = require('./utils/config')
 
 module.exports = {
   entry: path.join(__dirname, './app/index.js'),
+  plugins: [
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: path.join(__dirname, 'app/index.html')
+    })
+  ],
   output: {
     path: path.join(__dirname, './dist'),
     filename: 'bundle.js',

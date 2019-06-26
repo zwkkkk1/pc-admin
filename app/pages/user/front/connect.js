@@ -1,6 +1,6 @@
-export const mapStateToProps = (state) => {
+export const mapStateToProps = () => {
   return {}
 }
 
-export const mapDispatchToProps = (dispatch) => ({
+export const mapDispatchToProps = () => ({
 })

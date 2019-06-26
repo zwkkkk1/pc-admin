@@ -1,4 +1,4 @@
-export const mapStateToProps = (state) => {
+export const mapStateToProps = () => {
   return {
   }
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Input, Button, Icon, Checkbox, Message } from 'antd'
+import { Form, Input, Button, Icon, Message } from 'antd'
 
 import './style'
 
