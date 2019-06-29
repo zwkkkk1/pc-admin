@@ -1,7 +1,6 @@
 import React from 'react'
-import { Menu, Icon } from 'antd';
+import { Menu, Icon } from 'antd'
 import { history } from 'utils'
-import './style'
 
 const SubMenu = Menu.SubMenu;
 
@@ -15,6 +14,7 @@ export default class myMenu extends React.Component {
         openKey = index
       }
     })))
+
     this.state = {
       defaultSelect: pathname,
       openKeys: [`sub_${openKey}`]
