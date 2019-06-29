@@ -1,7 +1,5 @@
 import React from 'react'
-import { Breadcrumb } from 'antd';
-
-import './style'
+import { Breadcrumb } from 'antd'
 
 export default class myBreadcrumb extends React.Component {
   render() {

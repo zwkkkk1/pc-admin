@@ -23,11 +23,15 @@ instance.interceptors.request.use((config) => { // request前拦截
   NProgress.start()
   if (whiteList.indexOf(config.url) === -1) {
     const token = localStorage.getItem('token')
-    if (token) {
+    if (token && token !== 'undefined') {
       config.headers.Authorization = token
+      return config
+    } else {
+      message.error('用户信息不存在，请重新登录', 1).then(() => {
+        history.replace('/login')
+      })
     }
   }
-  return config
 })
 
 instance.interceptors.response.use(({ data, status }) => {  // response前拦截
