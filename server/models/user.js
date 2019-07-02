@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const Jwt = require('../utils/token')
 const myError = require('../utils/error')
 const Schema = mongoose.Schema
-const { hashPasswordSync, compareSync } = require('../utils/hashPassword')
+const { hashPasswordSync, compareSync } = require('../utils/HashPassword')
 
 let UserModel
 
