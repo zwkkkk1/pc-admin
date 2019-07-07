@@ -48,7 +48,7 @@ userSchema.statics = {
     const user = await UserModel.findOne({ username })
     myError.group([
       [ 500, '用户不存在', !user ],
-      [ 500, '用户已被冻结，请与管理员联系', !user.status ]
+      [ 500, '用户已被冻结，请与管理员联系', user && !user.status ]
     ])
     if (compareSync(password, user.password)) {
       const token = new Jwt({ id: user._id, level: user.level }).generateToken()

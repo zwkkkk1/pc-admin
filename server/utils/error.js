@@ -7,8 +7,7 @@ class myError extends Error {
 }
 
 myError.group = (map) => {
-  this.matchGroup = map
-  this.matchGroup.forEach(({ ...args }) => {
+  map.forEach(({ ...args }) => {
     if (args[2]) {
       throw new myError(args[0], args[1])
     }
