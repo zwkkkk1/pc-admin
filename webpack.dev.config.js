@@ -1,5 +1,6 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { url, port } = require('./utils/config')
 
 module.exports = {
   entry: {
@@ -30,9 +31,9 @@ module.exports = {
   },
   output: {
     path: path.join(__dirname, './dist'),
-    filename: '[name].[chunkhash].js',
+    filename: '[name].[hash].js',
     chunkFilename: '[name].[chunkhash].js',
-    publicPath: './'
+    publicPath: '/'
   },
   module: {
     rules: [
@@ -74,5 +75,19 @@ module.exports = {
     },
     extensions: ['.js', '.scss', '.css']
   },
-  devtool: 'cheap-module-source-map'
+  devServer: {
+    port: 8225,
+    contentBase: path.join(__dirname, './dist'),
+    historyApiFallback: true,
+    host: '0.0.0.0',
+    hot: false,
+    inline: false,
+    proxy: {
+      '/api': {
+        target: `${url}:${port}`,
+        pathRewrite: { '^/api': '' }
+      }
+    }
+  },
+  devtool: 'source-map'
 }
