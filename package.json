@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack-dev-server --config webpack.dev.config.js",
-    "build": "webpack --config webpack.config.js",
+    "start": "npde server.js",
+    "build": "rm -rf dist && webpack --config webpack.config.js",
     "analyz": "webpack --profile --json > stats.json && webpack-bundle-analyzer stats.json",
     "server": "nodemon server/app.js",
     "eslint": "eslint ./"
@@ -30,6 +31,7 @@
     "eslint": "^6.8.0",
     "eslint-plugin-react": "^7.19.0",
     "html-webpack-plugin": "^3.2.0",
+    "koa-swig": "^2.2.1",
     "node-sass": "^4.13.1",
     "nodemon": "^2.0.2",
     "postcss-loader": "^3.0.0",

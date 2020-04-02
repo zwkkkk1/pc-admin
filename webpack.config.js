@@ -30,9 +30,9 @@ module.exports = {
   },
   output: {
     path: path.join(__dirname, './dist'),
-    filename: '[name].[chunkhash].js',
-    chunkFilename: '[name].[chunkhash].js',
-    publicPath: './'
+    filename: 'assets/js/[name].[chunkhash].js',
+    chunkFilename: 'assets/js/[name].[chunkhash].js',
+    publicPath: '/'
   },
   module: {
     rules: [
@@ -73,6 +73,5 @@ module.exports = {
       services: path.resolve(__dirname, 'app/services/')
     },
     extensions: ['.js', '.scss', '.css']
-  },
-  devtool: 'cheap-module-source-map'
+  }
 }
